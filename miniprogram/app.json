@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "pages/test-entry/index"
+  ],
+  "window": {
+    "backgroundColor": "#F6F7FB",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "\u6392\u73ed\u7cfb\u7edf"
+  },
+  "sitemapLocation": "sitemap.json"
+}

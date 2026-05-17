@@ -1,0 +1,9 @@
+{
+  "desc": "Temporary sitemap for local development.",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+<view class="page">
+  <view class="header">
+    <text class="eyebrow">{{copy.eyebrow}}</text>
+    <text class="title">{{copy.title}}</text>
+    <text class="subtitle">{{copy.subtitle}}</text>
+  </view>
+
+  <view class="identity-list">
+    <button
+      wx:for="{{identities}}"
+      wx:key="id"
+      class="identity-button {{selectedId === item.id ? 'identity-button--selected' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="handleSelectIdentity"
+      hover-class="identity-button--hover"
+    >
+      <view class="identity-main">
+        <text class="identity-name">{{item.displayName}}</text>
+        <text class="identity-meta">{{item.roleLabel}} / {{item.studentNo}}</text>
+      </view>
+      <text class="identity-status" wx:if="{{selectedId === item.id}}">{{copy.selected}}</text>
+      <text class="identity-status" wx:else>{{copy.enter}}</text>
+    </button>
+  </view>
+
+  <view class="current" wx:if="{{selectedName}}">
+    <text class="current-label">{{copy.currentIdentity}}</text>
+    <text class="current-name">{{selectedName}}</text>
+  </view>
+</view>

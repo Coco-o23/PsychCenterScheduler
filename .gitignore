@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+server/node_modules/
+miniprogram_npm/
+
+# build output
+dist/
+server/dist/
+
+# environment files
+.env
+.env.*
+server/.env
+server/.env.*
+!.env.example
+!server/.env.example
+
+# npm logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# WeChat DevTools private config
+project.private.config.json
+
+# OS files
+.DS_Store
+Thumbs.db

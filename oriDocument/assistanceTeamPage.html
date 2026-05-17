@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-surface": "#191c23",
+            "on-tertiary-fixed-variant": "#783100",
+            "surface-container": "#ecedf7",
+            "primary-container": "#1a73e8",
+            "on-secondary-fixed-variant": "#005320",
+            "error-container": "#ffdad6",
+            "secondary-container": "#86f898",
+            "on-secondary": "#ffffff",
+            "surface-tint": "#005bc0",
+            "on-surface-variant": "#414754",
+            "on-secondary-fixed": "#002108",
+            "surface-container-high": "#e6e8f2",
+            "primary-fixed": "#d8e2ff",
+            "inverse-surface": "#2d3038",
+            "on-primary-fixed-variant": "#004493",
+            "on-background": "#191c23",
+            "error": "#ba1a1a",
+            "on-error": "#ffffff",
+            "tertiary-fixed-dim": "#ffb691",
+            "surface-dim": "#d8d9e3",
+            "on-tertiary-container": "#0e0200",
+            "inverse-primary": "#adc7ff",
+            "surface-bright": "#f9f9ff",
+            "outline": "#727785",
+            "outline-variant": "#c1c6d6",
+            "on-tertiary": "#ffffff",
+            "primary-fixed-dim": "#adc7ff",
+            "on-error-container": "#93000a",
+            "secondary-fixed": "#89fa9b",
+            "surface-container-low": "#f2f3fd",
+            "surface-variant": "#e0e2ec",
+            "tertiary-fixed": "#ffdbcb",
+            "surface-container-highest": "#e0e2ec",
+            "surface": "#f9f9ff",
+            "secondary-fixed-dim": "#6ddd81",
+            "inverse-on-surface": "#eff0fa",
+            "background": "#f9f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed": "#341100",
+            "on-primary-container": "#ffffff",
+            "tertiary": "#9e4300",
+            "secondary": "#006e2c",
+            "primary": "#005bbf",
+            "on-secondary-container": "#00722f",
+            "tertiary-container": "#c55500",
+            "on-primary-fixed": "#001a41"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            "card-gap": "12px",
+            base: "8px",
+            "grid-gutter": "1px",
+            "container-padding": "16px"
+          },
+          fontFamily: {
+            "headline-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-md": ["Inter"]
+          },
+          fontSize: {
+            "headline-lg": ["24px", { lineHeight: "32px", fontWeight: "700" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.5px", fontWeight: "500" }],
+            "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+            "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html, body {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9ff;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface mb-24">
+  <!-- TopAppBar -->
+  <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-container-padding h-14">
+    <div class="flex items-center gap-4">
+      <span class="material-symbols-outlined text-primary">menu</span>
+      <h1 class="font-headline-lg text-headline-lg font-bold text-primary">团队</h1>
+    </div>
+  </header>
+
+  <main class="pt-20 px-container-padding">
+    <!-- Summary Section -->
+    <section class="mb-8 p-6 bg-primary rounded-xl text-on-primary flex flex-col justify-between overflow-hidden relative">
+      <div class="z-10">
+        <p class="font-label-md text-label-md opacity-80 uppercase tracking-wider mb-1">中心管理</p>
+        <h2 class="font-headline-lg text-headline-lg mb-4">团队概览</h2>
+      </div>
+      <div class="flex items-end justify-between z-10">
+        <div>
+          <span id="member-count" class="text-5xl font-bold">24</span>
+          <span class="font-body-md text-body-md ml-2 opacity-90">助理总数</span>
+        </div>
+        <div class="bg-primary-container/30 p-3 rounded-lg backdrop-blur-sm">
+          <span class="material-symbols-outlined text-3xl">groups</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search and Filter Bar -->
+    <div class="mb-6 flex gap-3">
+      <div class="relative flex-grow">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+        <input class="w-full bg-surface-container-lowest border-none rounded-xl py-3 pl-10 pr-4 text-body-md focus:ring-2 focus:ring-primary shadow-sm" placeholder="搜索助理..." type="text">
+      </div>
+      <button class="bg-surface-container-lowest p-3 rounded-xl shadow-sm text-on-surface-variant">
+        <span class="material-symbols-outlined">filter_list</span>
+      </button>
+    </div>
+
+    <!-- Team List -->
+    <div id="team-list" class="space-y-card-gap">
+      <!-- Assistant Card 1 -->
+      <div class="member-card bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center justify-between border-l-4 border-primary" data-name="张伟" data-student-id="20210042" data-school="设计学院">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-variant shrink-0">
+            <img alt="Zhang Wei" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLU1_k5R72poFc0fXR7xoBQDd9cO3lA84qsivakH00MuovgmzJI78zov5tqdBG-NM7na1Z9eKx1K_jE-sid1grxXu3J4YJRhcBJOhCoBWYKeY-W1IJ2OhA5ykcEoZYtgMwEQGFTjcenCToaFx1LLXjSERT71luY2I7SkcCbk8l6x9rLztxyfI7Ej5nizwnipmDpMDqIQeRw41GY1-inAGdfaUdpKWSTC_EUco6RNMkN_7TBhc42AKS97VZJlI2dHqZpkmO65THrLlv">
+          </div>
+          <div>
+            <h3 class="member-name font-headline-md text-body-lg font-semibold">张伟</h3>
+            <p class="member-id font-label-md text-label-md text-on-surface-variant">学号：20210042</p>
+            <p class="member-school font-label-md text-label-md text-on-surface-variant">学院：设计学院</p>
+          </div>
+        </div>
+        <div class="text-right pr-1">
+          <p class="font-label-md text-label-md text-primary font-bold">18 个班次</p>
+          <p class="text-[10px] text-outline uppercase">本月</p>
+        </div>
+      </div>
+
+      <!-- Assistant Card 2 -->
+      <div class="member-card bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center justify-between border-l-4 border-secondary" data-name="李纳" data-student-id="20251013" data-school="电子与信息工程学院">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-variant shrink-0">
+            <img alt="Li Na" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCioDcbjHSR_uurTOcPTn4PqtBpfOSuSjopembRDPkBk5ic_EwC11TVNmNryZga6WYhcy9uxPPerhX6WQJKZ_SB5fyIsXmvR9N2o-k_hUUqMXC9SQ6vX5NDGvGnaCvBbTIOmYCkBbekIA31D40Ofqg02IlpLGa3eo0snPzzgrpi8lQ9QLry0HBYoCdZmYxmKIaZMtIjxAqzT7rMmsI_Q3STd8tWgvisBTNXNETVGjfOFC25FK2QVbwb4rV3JiSE3oNy6yCbQprEJmE">
+          </div>
+          <div>
+            <h3 class="member-name font-headline-md text-body-lg font-semibold">李纳</h3>
+            <p class="member-id font-label-md text-label-md text-on-surface-variant">学号：20251013</p>
+            <p class="member-school font-label-md text-label-md text-on-surface-variant">学院：电子与信息工程学院</p>
+          </div>
+        </div>
+        <div class="text-right pr-1">
+          <p class="font-label-md text-label-md text-primary font-bold">14 个班次</p>
+          <p class="text-[10px] text-outline uppercase">本月</p>
+        </div>
+      </div>
+
+      <!-- Assistant Card 3 -->
+      <div class="member-card bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center justify-between border-l-4 border-primary" data-name="陈昊" data-student-id="20220042" data-school="心理学院">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-variant shrink-0">
+            <img alt="Chen Hao" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_5sGehNpWENbp7eAxFBaZG9j68Ul-tyk2LNJbJ-PrWr_H8z3U9lMnh40ClPMsLDZCC11srfphTUJQlbyvBsg8EInz5a8hVmzcHIv_Fg69Ef5HG5s_i9DyQViFm0C8TmqDqrUONY3pogbnQFEUkSCIMyfWB_zp-DBhIo2CpOSYCmAWUndf-0kgMCxErqC1Pu7JtW7W0a9Ip2iTscxbaB4I8n1SfZf2_8BHYLYcFEtHkq9MKdTfJvLN3AtttJVyl9BGNoHCpKC3qdZV">
+          </div>
+          <div>
+            <h3 class="member-name font-headline-md text-body-lg font-semibold">陈昊</h3>
+            <p class="member-id font-label-md text-label-md text-on-surface-variant">学号：20220042</p>
+            <p class="member-school font-label-md text-label-md text-on-surface-variant">学院：心理学院</p>
+          </div>
+        </div>
+        <div class="text-right pr-1">
+          <p class="font-label-md text-label-md text-primary font-bold">22 个班次</p>
+          <p class="text-[10px] text-outline uppercase">本月</p>
+        </div>
+      </div>
+
+      <!-- Assistant Card 4 -->
+      <div class="member-card bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center justify-between border-l-4 border-secondary" data-name="汪林" data-student-id="20230811" data-school="外国语学院">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-variant shrink-0">
+            <img alt="Wang Lin" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHRijW2TSqW85bHHFkySnK4n36zRzqvaYNm04TUfr9gXrNDATepv4LSPeKGvQlTMkNbpsnURnhNCe2ilo7pJ6YGd2Wj5GNQ9DjV3U3qG6lFnMO1poyB1BbPbdOVWm4R8wXv_XnT4G8wuz2WK1Yf5dBxzK_1SZIIfpJyak459ZfOVPLhHgDvV3uQu-zN-rBgIHYWwTj5hTE79HtOzh0-4CMHSAIkea-oOfO1gPbSS_9CQWCmBvlqCQ3Uj3IMaoYpj7fiFVuNz9CY1tf">
+          </div>
+          <div>
+            <h3 class="member-name font-headline-md text-body-lg font-semibold">汪林</h3>
+            <p class="member-id font-label-md text-label-md text-on-surface-variant">学号：20230811</p>
+            <p class="member-school font-label-md text-label-md text-on-surface-variant">学院：外国语学院</p>
+          </div>
+        </div>
+        <div class="text-right pr-1">
+          <p class="font-label-md text-label-md text-primary font-bold">12 个班次</p>
+          <p class="text-[10px] text-outline uppercase">本月</p>
+        </div>
+      </div>
+
+      <!-- Assistant Card 5 -->
+      <div class="member-card bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center justify-between border-l-4 border-primary" data-name="周杰" data-student-id="20250037" data-school="地理规划学院">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-variant shrink-0">
+            <img alt="Zhou Jie" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5YaCWV7kVcyJpUsuDWG6dy8DFYJ4uKaicA28JEaAzYjBUwxt83Pe-vmsMil53lWdmmJS0dQUS20onGwmrkmTfr_PkSPZxx6FKfBcvaVkcdaoEhMlMZock1ZR4rFcmEXKwJcbKL1dTgi0g2iHCQpDjeWFhEcTFfaG2M1b4jjq3VI2tWzG_hK3v-udsl8adRG5ELfg2bL5b7tXjQqjAr20SfYn--jt3MEtFHdsr62mK5pzu4cZx2qWjym7v7F-oUzsnHfO4fy7NkGNF">
+          </div>
+          <div>
+            <h3 class="member-name font-headline-md text-body-lg font-semibold">周杰</h3>
+            <p class="member-id font-label-md text-label-md text-on-surface-variant">学号：20250037</p>
+            <p class="member-school font-label-md text-label-md text-on-surface-variant">学院：地理规划学院</p>
+          </div>
+        </div>
+        <div class="text-right pr-1">
+          <p class="font-label-md text-label-md text-primary font-bold">20 个班次</p>
+          <p class="text-[10px] text-outline uppercase">本月</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination / Load More -->
+    <div class="mt-8 flex justify-center">
+      <button id="load-more-members" type="button" class="flex items-center gap-2 text-primary font-body-md py-2 px-6 rounded-full border border-primary/20 hover:bg-primary/5 transition-colors">
+        <span>查看更多</span>
+        <span class="material-symbols-outlined text-sm">expand_more</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-2 pb-safe px-4 bg-surface-container-lowest dark:bg-inverse-surface shadow-lg rounded-t-xl z-50 h-16">
+
+  <a href="assistanceMainPage.html"
+    class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">edit_note</span>
+    <span class="font-label-md text-label-md">填报</span>
+  </a>
+
+  <a href="assistanceDutyPage.html"
+    class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">calendar_month</span>
+    <span class="font-label-md text-label-md">日程</span>
+  </a>
+
+  <a href="assistanceTeamPage.html"
+    class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-5 py-1.5 active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">groups</span>
+    <span class="font-label-md text-label-md">团队</span>
+  </a>
+
+  <a href="assistanceMyPage.html"
+    class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-label-md text-label-md">个人</span>
+  </a>
+
+</nav>
+
+  <script>
+    const memberCount = document.getElementById('member-count');
+    const loadMoreMembersBtn = document.getElementById('load-more-members');
+    const defaultVisibleMemberCount = 3;
+    let isAllMembersVisible = false;
+
+    function updateMemberCount() {
+      memberCount.textContent = document.querySelectorAll('.member-card').length;
+    }
+
+    function updateVisibleMembers() {
+      const cards = Array.from(document.querySelectorAll('.member-card'));
+
+      cards.forEach((card, index) => {
+        if (isAllMembersVisible || index < defaultVisibleMemberCount) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (cards.length <= defaultVisibleMemberCount || isAllMembersVisible) {
+        loadMoreMembersBtn.classList.add('hidden');
+      } else {
+        loadMoreMembersBtn.classList.remove('hidden');
+      }
+    }
+
+    loadMoreMembersBtn.addEventListener('click', () => {
+      isAllMembersVisible = true;
+      updateVisibleMembers();
+    });
+
+    updateMemberCount();
+    updateVisibleMembers();
+  </script>
+</body>
+</html>

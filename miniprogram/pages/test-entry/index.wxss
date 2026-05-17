@@ -1,0 +1,108 @@
+.page {
+  min-height: 100vh;
+  padding: 48rpx 32rpx;
+  background: #f6f7fb;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  margin-bottom: 40rpx;
+}
+
+.eyebrow {
+  color: #5b6b86;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.title {
+  color: #162033;
+  font-size: 44rpx;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.subtitle {
+  color: #69758a;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.identity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.identity-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 128rpx;
+  padding: 24rpx;
+  border: 2rpx solid #e4e8f0;
+  border-radius: 16rpx;
+  background: #ffffff;
+  color: #1f2937;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.identity-button::after {
+  border: 0;
+}
+
+.identity-button--hover {
+  background: #f0f4fa;
+}
+
+.identity-button--selected {
+  border-color: #2f6fef;
+  background: #edf4ff;
+}
+
+.identity-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.identity-name {
+  color: #162033;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.identity-meta {
+  color: #6b7280;
+  font-size: 24rpx;
+}
+
+.identity-status {
+  color: #2f6fef;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 36rpx;
+  padding: 24rpx;
+  border-radius: 14rpx;
+  background: #162033;
+}
+
+.current-label {
+  color: #c7d2e5;
+  font-size: 24rpx;
+}
+
+.current-name {
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+}

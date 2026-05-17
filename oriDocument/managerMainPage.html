@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface": "#191c23",
+            "tertiary": "#9e4300",
+            "on-tertiary-fixed-variant": "#783100",
+            "on-error": "#ffffff",
+            "inverse-primary": "#adc7ff",
+            "surface-tint": "#005bc0",
+            "outline-variant": "#c1c6d6",
+            "outline": "#727785",
+            "secondary-container": "#86f898",
+            "on-secondary-fixed-variant": "#005320",
+            "primary-fixed-dim": "#adc7ff",
+            "on-tertiary-fixed": "#341100",
+            "on-primary-fixed-variant": "#004493",
+            "primary-container": "#1a73e8",
+            "surface-container": "#ecedf7",
+            "primary-fixed": "#d8e2ff",
+            "tertiary-container": "#c55500",
+            "inverse-on-surface": "#eff0fa",
+            "on-tertiary-container": "#0e0200",
+            "on-primary": "#ffffff",
+            "secondary-fixed-dim": "#6ddd81",
+            "primary": "#005bbf",
+            "surface-container-highest": "#e0e2ec",
+            "on-background": "#191c23",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed": "#002108",
+            "error-container": "#ffdad6",
+            "surface-variant": "#e0e2ec",
+            "on-primary-container": "#ffffff",
+            "on-error-container": "#93000a",
+            "background": "#f9f9ff",
+            "tertiary-fixed": "#ffdbcb",
+            "inverse-surface": "#2d3038",
+            "secondary-fixed": "#89fa9b",
+            "surface-bright": "#f9f9ff",
+            "surface-dim": "#d8d9e3",
+            "surface-container-high": "#e6e8f2",
+            "on-tertiary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "on-surface-variant": "#414754",
+            "on-primary-fixed": "#001a41",
+            "tertiary-fixed-dim": "#ffb691",
+            "surface-container-low": "#f2f3fd",
+            "surface": "#f9f9ff",
+            "secondary": "#006e2c",
+            "on-secondary-container": "#00722f",
+            "error": "#ba1a1a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "grid-gutter": "1px",
+            "card-gap": "12px",
+            "base": "8px",
+            "container-padding": "16px"
+          },
+          "fontFamily": {
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Inter"]
+          },
+          "fontSize": {
+            "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+            "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+  <!-- TopAppBar -->
+  <header class="fixed top-0 w-full z-50 bg-surface dark:bg-on-background flex items-center justify-between px-container-padding h-14">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="menu">menu</span>
+      <h1 class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed">值班管理</h1>
+    </div>
+  </header>
+
+  <main class="pt-20 px-container-padding space-y-6">
+    <!-- Profile & Welcome Section -->
+    <section class="flex items-center justify-between bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-surface-container-highest">
+      <div class="flex items-center gap-4">
+        <div class="relative">
+          <img alt="Zhang Wei" class="w-14 h-14 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLU1_k5R72poFc0fXR7xoBQDd9cO3lA84qsivakH00MuovgmzJI78zov5tqdBG-NM7na1Z9eKx1K_jE-sid1grxXu3J4YJRhcBJOhCoBWYKeY-W1IJ2OhA5ykcEoZYtgMwEQGFTjcenCToaFx1LLXjSERT71luY2I7SkcCbk8l6x9rLztxyfI7Ej5nizwnipmDpMDqIQeRw41GY1-inAGdfaUdpKWSTC_EUco6RNMkN_7TBhc42AKS97VZJlI2dHqZpkmO65THrLlv">
+          <div class="absolute bottom-0 right-0 w-4 h-4 bg-secondary border-2 border-surface-container-lowest rounded-full"></div>
+        </div>
+        <div>
+          <h2 class="font-headline-md text-headline-md text-on-surface">张伟</h2>
+          <p class="font-label-md text-label-md text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full inline-block">系统管理员</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Personal Availability Entry -->
+    <section class="bg-primary text-on-primary p-5 rounded-xl shadow-sm flex items-center justify-between">
+      <div class="space-y-1">
+        <h3 class="font-headline-md text-headline-md">空闲时间填报</h3>
+        <p class="font-body-md text-body-md opacity-90">请于周五前完成下周可用时段确认</p>
+      </div>
+      <a
+    href="managerTimePage.html"
+    class="bg-surface-container-lowest text-primary px-4 py-2 rounded-full font-label-md transition-transform active:scale-95"
+  >
+    立即填报
+  </a>
+    </section>
+
+    <!-- Availability Collection Module -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="font-headline-md text-headline-md">空闲时间填报收集</h3>
+        <!-- 测试用：不用后台数据，左右切换三种状态 -->
+        <div class="flex items-center gap-1 bg-surface-container-lowest rounded-full border border-surface-container-highest p-1 shadow-sm">
+          <button id="collection-prev" type="button" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-transform" aria-label="上一个状态">
+            <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+          </button>
+          <span id="collection-state-name" class="font-label-md text-label-md text-primary min-w-[48px] text-center">待发布</span>
+          <button id="collection-next" type="button" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-transform" aria-label="下一个状态">
+            <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest p-5 rounded-xl shadow-sm border border-surface-container-highest space-y-4">
+        <div class="flex justify-between items-start gap-3">
+          <div>
+            <h4 id="collection-week-title" class="font-headline-md text-headline-md">5.13 - 5.19</h4>
+            <p id="collection-week-subtitle" class="text-on-surface-variant font-body-md text-body-md">第6教学周</p>
+          </div>
+          <span id="collection-status-badge" class="shrink-0 px-2 py-1 rounded text-xs font-medium bg-surface-container-high text-on-surface-variant">待发布</span>
+        </div>
+
+        <!-- 待发布：发布按钮 + 收集周次/班次说明 -->
+        <div id="collection-pending-view" class="space-y-4">
+          <button id="publish-collection-btn" type="button" class="w-full h-12 rounded-full bg-primary text-on-primary font-headline-md text-headline-md shadow-sm active:scale-95 transition-transform flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">campaign</span>
+            收集空闲时间
+          </button>
+        </div>
+
+        <!-- 收集中：当前进度视图 -->
+        <div id="collection-active-view" class="space-y-4 hidden">
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface-variant font-label-md text-label-md">收集进度</span>
+              <span id="collection-progress-text" class="text-primary font-bold font-label-md">85%</span>
+            </div>
+            <div class="w-full bg-surface-container-high h-3 rounded-full overflow-hidden">
+              <div id="collection-progress-bar" class="bg-primary h-full w-[85%] rounded-full transition-all duration-300"></div>
+            </div>
+            <p class="font-label-md text-label-md text-on-surface-variant">已有 15 / 18 名助理完成填报</p>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-surface-container-high">
+            <div class="flex -space-x-2">
+              <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-container-high flex items-center justify-center text-[10px] font-bold">A</div>
+              <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-secondary-container flex items-center justify-center text-[10px] font-bold text-on-secondary-container">B</div>
+              <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container">C</div>
+              <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-variant flex items-center justify-center text-[10px] font-bold text-on-surface-variant">+12</div>
+            </div>
+            <button class="text-primary font-label-md flex items-center gap-1">
+              详情管理
+              <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 已完成：100% 完成视图 -->
+        <div id="collection-completed-view" class="space-y-4 hidden">
+          <div class="rounded-xl bg-secondary-container/30 p-4 border border-secondary-container">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+                <span class="material-symbols-outlined">check</span>
+              </div>
+              <div>
+                <h5 class="font-body-lg text-body-lg font-semibold text-on-surface">收集已完成</h5>
+                <p class="font-label-md text-label-md text-on-surface-variant">18 / 18 名助理已完成空闲时间填报</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface-variant font-label-md text-label-md">收集进度</span>
+              <span class="text-secondary font-bold font-label-md">100%</span>
+            </div>
+            <div class="w-full bg-surface-container-high h-3 rounded-full overflow-hidden">
+              <div class="bg-secondary h-full w-full rounded-full"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-surface-container-high">
+            <p class="font-label-md text-label-md text-on-surface-variant">可以进入排班表生成环节</p>
+            <button class="text-primary font-label-md flex items-center gap-1">
+              查看结果
+              <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="space-y-3">
+      <h3 class="font-headline-md text-headline-md">快捷管理</h3>
+      <div class="grid grid-cols-1 gap-card-gap">
+        <!-- Large Dynamic Action Button -->
+        <div class="relative overflow-hidden bg-on-surface h-32 rounded-xl flex items-center p-6 group cursor-pointer transition-all hover:scale-[1.01] active:scale-95">
+          <div class="z-10 space-y-1">
+            <h4 class="text-white font-headline-lg text-headline-lg">生成排班表</h4>
+            <p class="text-outline-variant font-body-md text-body-md">AI 自动优化人员分配冲突</p>
+          </div>
+          <span class="material-symbols-outlined text-white text-5xl absolute right-6 opacity-20 group-hover:opacity-40 transition-opacity" data-icon="auto_awesome">auto_awesome</span>
+          <div class="absolute inset-0 bg-gradient-to-r from-primary/40 to-transparent opacity-50"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BottomNavBar -->
+  <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-2 pb-safe px-4 bg-surface-container-lowest dark:bg-inverse-surface shadow-lg rounded-t-xl z-50 h-16">
+
+  <a href="managerMainPage.html"
+    class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-5 py-1.5 active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">view_quilt</span>
+    <span class="font-label-md text-label-md">排班</span>
+  </a>
+
+  <a href="managerDutyPage.html"
+    class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">calendar_month</span>
+    <span class="font-label-md text-label-md">日程</span>
+  </a>
+
+  <a href="managerTeamPage.html"
+    class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">groups</span>
+    <span class="font-label-md text-label-md">团队</span>
+  </a>
+
+  <a href="managerMyPage.html"
+    class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-label-md text-label-md">个人</span>
+  </a>
+
+</nav>
+
+  <script>
+    const collectionStates = [
+      {
+        key: 'pending',
+        name: '待发布',
+        badgeClass: 'bg-surface-container-high text-on-surface-variant',
+        weekTitle: '5.13 - 5.19',
+        weekSubtitle: '第6教学周'
+      },
+      {
+        key: 'active',
+        name: '收集中',
+        badgeClass: 'bg-primary/10 text-primary',
+        weekTitle: '5.13 - 5.19',
+        weekSubtitle: '第6教学周'
+      },
+      {
+        key: 'completed',
+        name: '已完成',
+        badgeClass: 'bg-secondary-container text-on-secondary-container',
+        weekTitle: '5.13 - 5.19',
+        weekSubtitle: '第6教学周'
+      }
+    ];
+
+    let collectionStateIndex = 0;
+
+    const prevBtn = document.getElementById('collection-prev');
+    const nextBtn = document.getElementById('collection-next');
+    const stateName = document.getElementById('collection-state-name');
+    const statusBadge = document.getElementById('collection-status-badge');
+    const weekTitle = document.getElementById('collection-week-title');
+    const weekSubtitle = document.getElementById('collection-week-subtitle');
+
+    const pendingView = document.getElementById('collection-pending-view');
+    const activeView = document.getElementById('collection-active-view');
+    const completedView = document.getElementById('collection-completed-view');
+    const publishBtn = document.getElementById('publish-collection-btn');
+
+    function hideAllCollectionViews() {
+      pendingView.classList.add('hidden');
+      activeView.classList.add('hidden');
+      completedView.classList.add('hidden');
+    }
+
+    function setStatusBadge(state) {
+      statusBadge.className = 'shrink-0 px-2 py-1 rounded text-xs font-medium ' + state.badgeClass;
+      statusBadge.textContent = state.name;
+    }
+
+    function renderCollectionState() {
+      const state = collectionStates[collectionStateIndex];
+
+      stateName.textContent = state.name;
+      weekTitle.textContent = state.weekTitle;
+      weekSubtitle.textContent = state.weekSubtitle;
+      setStatusBadge(state);
+
+      hideAllCollectionViews();
+
+      if (state.key === 'pending') {
+        pendingView.classList.remove('hidden');
+      } else if (state.key === 'active') {
+        activeView.classList.remove('hidden');
+      } else if (state.key === 'completed') {
+        completedView.classList.remove('hidden');
+      }
+    }
+
+    prevBtn.addEventListener('click', () => {
+      collectionStateIndex = (collectionStateIndex - 1 + collectionStates.length) % collectionStates.length;
+      renderCollectionState();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      collectionStateIndex = (collectionStateIndex + 1) % collectionStates.length;
+      renderCollectionState();
+    });
+
+    publishBtn.addEventListener('click', () => {
+      // 测试逻辑：点击“收集空闲时间”后，直接进入“收集中”状态。
+      collectionStateIndex = 1;
+      renderCollectionState();
+    });
+
+    renderCollectionState();
+  </script>
+</body>
+</html>

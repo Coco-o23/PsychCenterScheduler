@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-error": "#ffffff",
+          "outline": "#727785",
+          "primary": "#005bbf",
+          "tertiary-container": "#c55500",
+          "on-tertiary-fixed": "#341100",
+          "on-primary": "#ffffff",
+          "on-background": "#191c23",
+          "inverse-on-surface": "#eff0fa",
+          "on-surface-variant": "#414754",
+          "secondary-fixed": "#89fa9b",
+          "error-container": "#ffdad6",
+          "secondary-container": "#86f898",
+          "background": "#f9f9ff",
+          "primary-fixed-dim": "#adc7ff",
+          "on-tertiary": "#ffffff",
+          "on-surface": "#191c23",
+          "tertiary-fixed-dim": "#ffb691",
+          "on-tertiary-fixed-variant": "#783100",
+          "on-primary-fixed": "#001a41",
+          "on-secondary-container": "#00722f",
+          "on-primary-fixed-variant": "#004493",
+          "surface-container": "#ecedf7",
+          "surface-container-high": "#e6e8f2",
+          "surface-variant": "#e0e2ec",
+          "on-error-container": "#93000a",
+          "inverse-surface": "#2d3038",
+          "surface-tint": "#005bc0",
+          "on-secondary-fixed": "#002108",
+          "secondary-fixed-dim": "#6ddd81",
+          "surface-dim": "#d8d9e3",
+          "surface": "#f9f9ff",
+          "primary-container": "#1a73e8",
+          "tertiary-fixed": "#ffdbcb",
+          "on-secondary": "#ffffff",
+          "inverse-primary": "#adc7ff",
+          "error": "#ba1a1a",
+          "on-primary-container": "#ffffff",
+          "outline-variant": "#c1c6d6",
+          "on-tertiary-container": "#0e0200",
+          "surface-container-highest": "#e0e2ec",
+          "tertiary": "#9e4300",
+          "secondary": "#006e2c",
+          "primary-fixed": "#d8e2ff",
+          "surface-container-low": "#f2f3fd",
+          "on-secondary-fixed-variant": "#005320",
+          "surface-bright": "#f9f9ff",
+          "surface-container-lowest": "#ffffff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "base": "8px",
+          "grid-gutter": "1px",
+          "container-padding": "16px",
+          "card-gap": "12px"
+        },
+        "fontFamily": {
+          "headline-md": ["Inter"],
+          "body-md": ["Inter"],
+          "headline-lg": ["Inter"],
+          "body-lg": ["Inter"],
+          "label-md": ["Inter"]
+        },
+        "fontSize": {
+          "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+          "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+          "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+          "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+          "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}]
+        }
+      },
+    },
+  }
+</script>
+
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  html, body {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  body {
+    min-height: max(884px, 100dvh);
+  }
+</style>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface">
+
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-container-padding h-14 bg-surface dark:bg-on-background border-b border-outline-variant/30 transition-colors duration-200 ease-in-out">
+  <div class="flex items-center gap-4">
+    <span class="material-symbols-outlined text-primary dark:text-primary-fixed cursor-pointer">menu</span>
+    <h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed">填报</h1>
+  </div>
+</header>
+
+<main class="pt-14 pb-36 px-container-padding min-h-screen">
+
+  <!-- Page Title & Header Section -->
+  <section class="mt-6 mb-6">
+    <h2 class="font-headline-lg text-headline-lg text-on-background mb-2">下周空闲时间填报</h2>
+    <p class="text-on-surface-variant font-body-md">请选择您下周可以参加排班的时间段</p>
+  </section>
+
+  <!-- Configuration Settings Section -->
+  <div class="bg-surface-container-lowest rounded-xl p-5 mb-6 shadow-sm border border-outline-variant/30 space-y-5">
+
+    <!-- Full Week Leave Toggle -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="font-headline-md text-headline-md text-on-surface">下周全周请假</h3>
+        <p class="font-label-md text-label-md text-on-surface-variant">开启后将无法选择特定时间段</p>
+      </div>
+
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input id="full-week-leave" class="sr-only peer" type="checkbox">
+        <div class="w-11 h-6 bg-surface-container-highest rounded-full 
+                    peer-checked:bg-primary
+                    after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                    after:bg-white after:border-gray-300 after:border after:rounded-full
+                    after:h-5 after:w-5 after:transition-all
+                    peer-checked:after:translate-x-full peer-checked:after:border-white">
+        </div>
+      </label>
+    </div>
+
+    <div class="h-px bg-outline-variant/20"></div>
+
+    <!-- Max Shifts per Week -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="font-body-lg font-bold text-on-surface">每周最高排班数</h3>
+        <p class="font-label-md text-label-md text-on-surface-variant">您每周愿意接受的最多次数</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <select class="min-w-[76px] bg-surface-container-low border border-outline-variant rounded-lg text-body-md pl-3 pr-8 py-1.5 focus:ring-primary focus:border-primary">
+          <option value="1">1 次</option>
+          <option selected value="2">2 次</option>
+          <option value="3">3 次</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="h-px bg-outline-variant/20"></div>
+
+    <!-- Set as Default Toggle -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="font-body-lg font-bold text-on-surface">设为默认空闲时间</h3>
+        <p class="font-label-md text-label-md text-on-surface-variant">未来填报将自动使用本次选择</p>
+      </div>
+
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input id="set-default-free-time" class="sr-only peer" type="checkbox">
+        <div class="w-11 h-6 bg-surface-container-highest rounded-full 
+                    peer-checked:bg-primary
+                    after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                    after:bg-white after:border-gray-300 after:border after:rounded-full
+                    after:h-5 after:w-5 after:transition-all
+                    peer-checked:after:translate-x-full peer-checked:after:border-white">
+        </div>
+      </label>
+    </div>
+
+  </div>
+
+  <!-- Time Grid Section -->
+  <section class="space-y-4">
+
+    <!-- Monday -->
+    <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/10">
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-headline-md text-headline-md text-primary">周一 (11.20)</span>
+      </div>
+
+      <div class="grid gap-3 grid-cols-2">
+        <button
+          type="button"
+          class="time-slot flex flex-col items-center justify-center py-4 rounded-lg border transition-colors cursor-pointer border-primary bg-secondary-container text-on-secondary-container shadow-sm"
+          data-available="true"
+        >
+          <span class="slot-time font-label-md text-label-md">08:30 - 13:00</span>
+          <span class="slot-status font-body-md font-bold">有空</span>
+        </button>
+
+        <button
+          type="button"
+          class="time-slot flex flex-col items-center justify-center py-4 rounded-lg border transition-colors cursor-pointer border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-high"
+          data-available="false"
+        >
+          <span class="slot-time font-label-md text-label-md text-on-surface-variant">13:00 - 17:30</span>
+          <span class="slot-status font-body-md">没空</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tuesday -->
+    <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/10">
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-headline-md text-headline-md text-on-surface">周二 (11.21)</span>
+      </div>
+
+      <div class="grid gap-3 grid-cols-2">
+        <button
+          type="button"
+          class="time-slot flex flex-col items-center justify-center py-4 rounded-lg border transition-colors cursor-pointer border-primary bg-secondary-container text-on-secondary-container shadow-sm"
+          data-available="true"
+        >
+          <span class="slot-time font-label-md text-label-md">08:30 - 13:00</span>
+          <span class="slot-status font-body-md font-bold">有空</span>
+        </button>
+
+        <button
+          type="button"
+          class="time-slot flex flex-col items-center justify-center py-4 rounded-lg border transition-colors cursor-pointer border-primary bg-secondary-container text-on-secondary-container shadow-sm"
+          data-available="true"
+        >
+          <span class="slot-time font-label-md text-label-md">13:00 - 17:30</span>
+          <span class="slot-status font-body-md font-bold">有空</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Wednesday Locked -->
+    <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm opacity-50 border-dashed border-2 border-outline-variant">
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-headline-md text-headline-md text-on-surface">周三 (11.22)</span>
+        <span class="material-symbols-outlined text-outline-variant">lock</span>
+      </div>
+
+      <div class="text-center py-4 text-on-surface-variant italic">
+        该日已被标记为不可用
+      </div>
+    </div>
+
+        <!-- Thursday -->
+    <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/10">
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-headline-md text-headline-md text-on-surface">周四 (11.23)</span>
+        
+      </div>
+
+      <div class="grid gap-3 grid-cols-2">
+        <button
+          type="button"
+          class="time-slot flex flex-col items-center justify-center py-4 rounded-lg border transition-colors cursor-pointer border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-high"
+          data-available="false"
+        >
+          <span class="slot-time font-label-md text-label-md text-on-surface-variant">08:30 - 13:00</span>
+          <span class="slot-status font-body-md">没空</span>
+        </button>
+
+        <button
+          type="button"
+          class="time-slot flex flex-col items-center justify-center py-4 rounded-lg border transition-colors cursor-pointer border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-high"
+          data-available="false"
+        >
+          <span class="slot-time font-label-md text-label-md text-on-surface-variant">13:00 - 17:30</span>
+          <span class="slot-status font-body-md">没空</span>
+        </button>
+      </div>
+    </div>
+
+        <!-- Friday -->
+    <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/10">
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-headline-md text-headline-md text-on-surface">周五 (11.24)</span>
+        
+      </div>
+
+      <div class="grid gap-3 grid-cols-2">
+        <button
+          type="button"
+          class="time-slot flex flex-col items-center justify-center py-4 rounded-lg border transition-colors cursor-pointer border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-high"
+          data-available="false"
+        >
+          <span class="slot-time font-label-md text-label-md text-on-surface-variant">08:30 - 13:00</span>
+          <span class="slot-status font-body-md">没空</span>
+        </button>
+
+        <button
+          type="button"
+          class="time-slot flex flex-col items-center justify-center py-4 rounded-lg border transition-colors cursor-pointer border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-high"
+          data-available="false"
+        >
+          <span class="slot-time font-label-md text-label-md text-on-surface-variant">13:00 - 17:30</span>
+          <span class="slot-status font-body-md">没空</span>
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Status Tip Card -->
+  <div class="mt-8 mb-4 p-4 bg-primary-container/10 rounded-xl border border-primary-container/30">
+    <div class="flex gap-3">
+      <span class="material-symbols-outlined text-primary">info</span>
+      <p class="font-label-md text-label-md text-on-primary-container">
+        提示：请确保填报的时间准确无误。管理员将根据您的填报生成下周排班。
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<!-- Bottom Actions & Navigation -->
+<div class="fixed bottom-0 w-full z-50">
+
+  <!-- Floating Submit Button -->
+  <div class="px-container-padding pb-4 pt-2 bg-gradient-to-t from-surface to-transparent">
+    <button class="w-full h-[54px] bg-primary text-on-primary rounded-full font-headline-md text-headline-md shadow-lg active:scale-95 transition-transform duration-150 flex items-center justify-center gap-2">
+      提交填报
+      <span class="material-symbols-outlined">send</span>
+    </button>
+  </div>
+
+  <!-- BottomNavBar -->
+<nav class="w-full flex justify-around items-center pt-2 pb-safe px-4 bg-surface-container-lowest dark:bg-inverse-surface shadow-[0_-4px_12px_-4px_rgba(0,0,0,0.1)] rounded-t-2xl">
+
+  <a href="assistanceMainPage.html"
+     class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-5 py-1.5 active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">edit_note</span>
+    <span class="font-label-md text-label-md">填报</span>
+  </a>
+
+  <a href="assistanceDutyPage.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">calendar_month</span>
+    <span class="font-label-md text-label-md">日程</span>
+  </a>
+
+  <a href="assistanceTeamPage.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">groups</span>
+    <span class="font-label-md text-label-md">团队</span>
+  </a>
+
+  <a href="assistanceMyPage.html"
+     class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-5 py-1.5 hover:bg-surface-container-high dark:hover:bg-surface-dim active:scale-95 transition-transform duration-150">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-label-md text-label-md">个人</span>
+  </a>
+
+</nav>
+
+</div>
+
+<script>
+  function setSlotState(slot, available) {
+    const statusText = slot.querySelector('.slot-status');
+    const timeText = slot.querySelector('.slot-time');
+
+    slot.dataset.available = available ? 'true' : 'false';
+
+    if (available) {
+      slot.classList.remove(
+        'border-outline-variant',
+        'bg-surface-container-lowest',
+        'text-on-surface',
+        'hover:bg-surface-container-high'
+      );
+
+      slot.classList.add(
+        'border-primary',
+        'bg-secondary-container',
+        'text-on-secondary-container',
+        'shadow-sm'
+      );
+
+      statusText.textContent = '有空';
+      statusText.classList.add('font-bold');
+      timeText.classList.remove('text-on-surface-variant');
+    } else {
+      slot.classList.remove(
+        'border-primary',
+        'bg-secondary-container',
+        'text-on-secondary-container',
+        'shadow-sm'
+      );
+
+      slot.classList.add(
+        'border-outline-variant',
+        'bg-surface-container-lowest',
+        'text-on-surface',
+        'hover:bg-surface-container-high'
+      );
+
+      statusText.textContent = '没空';
+      statusText.classList.remove('font-bold');
+      timeText.classList.add('text-on-surface-variant');
+    }
+  }
+
+  document.querySelectorAll('.time-slot').forEach(slot => {
+    slot.addEventListener('click', () => {
+      const currentState = slot.dataset.available === 'true';
+      setSlotState(slot, !currentState);
+    });
+  });
+</script>
+
+</body>
+</html>
