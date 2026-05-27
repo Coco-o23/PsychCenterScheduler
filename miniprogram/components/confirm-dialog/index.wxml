@@ -1,0 +1,10 @@
+<view wx:if="{{visible}}" class="dialog-mask">
+  <view class="dialog">
+    <text class="dialog__title">{{title}}</text>
+    <text class="dialog__message">{{message}}</text>
+    <view class="dialog__actions">
+      <button class="dialog__cancel" hover-class="dialog__cancel--hover" bindtap="handleCancel">{{cancelLabel}}</button>
+      <button class="dialog__confirm dialog__confirm--{{tone}}" hover-class="dialog__confirm--hover" bindtap="handleConfirm">{{confirmLabel}}</button>
+    </view>
+  </view>
+</view>

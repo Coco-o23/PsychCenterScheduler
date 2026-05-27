@@ -1,0 +1,4 @@
+<button class="slot slot--{{state}} {{disabled ? 'slot--disabled' : ''}}" hover-class="slot--hover" bindtap="handleTap">
+  <text class="slot__title">{{title}}</text>
+  <text class="slot__subtitle">{{subtitle}}</text>
+</button>

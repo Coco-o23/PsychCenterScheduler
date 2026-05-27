@@ -1,0 +1,19 @@
+<view class="shift-card" bindtap="handleTap">
+  <view class="shift-card__accent"></view>
+  <view class="shift-card__main">
+    <view class="shift-card__head">
+      <view class="shift-card__title-group">
+        <text class="shift-card__time">{{time}}</text>
+        <text class="shift-card__title">{{title}}</text>
+      </view>
+      <status-chip label="{{statusLabel}}" tone="{{statusTone}}" />
+    </view>
+    <view class="shift-card__people">
+      <text wx:for="{{people}}" wx:key="*this" class="shift-card__person">{{item}}</text>
+    </view>
+    <view class="shift-card__foot">
+      <text class="shift-card__location">{{location}}</text>
+      <text wx:if="{{riskLabel}}" class="shift-card__risk">{{riskLabel}}</text>
+    </view>
+  </view>
+</view>

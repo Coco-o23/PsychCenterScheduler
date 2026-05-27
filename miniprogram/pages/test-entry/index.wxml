@@ -3,6 +3,27 @@
     <text class="eyebrow">{{copy.eyebrow}}</text>
     <text class="title">{{copy.title}}</text>
     <text class="subtitle">{{copy.subtitle}}</text>
+    <text class="helper">{{copy.helper}}</text>
+  </view>
+
+  <view class="custom-entry">
+    <text class="custom-entry__title">{{copy.customTitle}}</text>
+    <text class="custom-entry__hint">{{copy.customHint}}</text>
+    <view class="custom-entry__row">
+      <input
+        class="custom-entry__input"
+        placeholder="{{copy.customPlaceholder}}"
+        value="{{customTestKey}}"
+        bindinput="handleCustomKeyInput"
+      />
+      <button
+        class="custom-entry__button"
+        bindtap="handleSubmitCustomKey"
+        hover-class="custom-entry__button--hover"
+      >
+        {{pendingId === customTestKey && customTestKey ? copy.loading : copy.customEnter}}
+      </button>
+    </view>
   </view>
 
   <view class="identity-list">
@@ -17,8 +38,10 @@
       <view class="identity-main">
         <text class="identity-name">{{item.displayName}}</text>
         <text class="identity-meta">{{item.roleLabel}} / {{item.studentNo}}</text>
+        <text class="identity-helper">{{item.statusLabel}}</text>
       </view>
-      <text class="identity-status" wx:if="{{selectedId === item.id}}">{{copy.selected}}</text>
+      <text class="identity-status" wx:if="{{pendingId === item.id}}">{{copy.loading}}</text>
+      <text class="identity-status" wx:elif="{{selectedId === item.id}}">{{copy.selected}}</text>
       <text class="identity-status" wx:else>{{copy.enter}}</text>
     </button>
   </view>

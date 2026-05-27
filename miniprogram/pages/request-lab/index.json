@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "app-top-bar": "../../components/app-top-bar/index",
+    "status-chip": "../../components/status-chip/index",
+    "state-view": "../../components/state-view/index"
+  },
+  "navigationBarTitleText": "\u8bf7\u6c42\u9a8c\u6536"
+}

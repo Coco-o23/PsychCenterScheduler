@@ -1,0 +1,283 @@
+<view class="duty-page surface-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar title="值班管理" />
+
+    <view class="duty-page__content">
+      <view class="duty-page__month-row">
+        <view>
+          <text class="duty-page__month-label">{{monthLabel}}</text>
+          <text class="duty-page__week-label">{{teachingWeekLabel}}</text>
+        </view>
+        <view class="duty-page__month-actions">
+          <button class="duty-page__month-button" data-delta="-1" bindtap="handleChangeMonth">‹</button>
+          <button class="duty-page__month-button" data-delta="1" bindtap="handleChangeMonth">›</button>
+        </view>
+      </view>
+
+      <view class="duty-page__calendar-card">
+        <view class="duty-page__calendar-head">
+          <text wx:for="{{weekdayHeaders}}" wx:key="*this" class="duty-page__calendar-head-cell">{{item}}</text>
+        </view>
+        <view class="duty-page__calendar-grid">
+          <button
+            wx:for="{{calendarDays}}"
+            wx:key="date"
+            class="duty-page__calendar-cell {{item.isSelected ? 'duty-page__calendar-cell--selected' : ''}} {{!item.inCurrentMonth ? 'duty-page__calendar-cell--muted' : ''}} {{item.isToday ? 'duty-page__calendar-cell--today' : ''}} {{item.noShift ? 'duty-page__calendar-cell--no-shift' : ''}}"
+            data-date="{{item.date}}"
+            bindtap="handleSelectDate"
+          >
+            <text class="duty-page__calendar-day">{{item.dayOfMonth}}</text>
+            <view wx:if="{{item.hasAssignments}}" class="duty-page__calendar-dot"></view>
+            <text wx:if="{{item.assignmentCount > 0}}" class="duty-page__calendar-badge">{{item.assignmentCount}}</text>
+          </button>
+        </view>
+      </view>
+
+      <view class="duty-page__summary-card">
+        <view class="duty-page__summary-grid">
+          <view class="duty-page__summary-item">
+            <text class="duty-page__summary-title">本月值班次数</text>
+            <text class="duty-page__summary-value">{{monthlySummary.publishedShiftCount}}</text>
+          </view>
+          <view class="duty-page__summary-item">
+            <text class="duty-page__summary-title">原定工时</text>
+            <text class="duty-page__summary-value">{{scheduledHoursText}}</text>
+          </view>
+          <view class="duty-page__summary-item">
+            <text class="duty-page__summary-title">已批加班</text>
+            <text class="duty-page__summary-value">{{overtimeHoursText}}</text>
+          </view>
+          <view class="duty-page__summary-item">
+            <text class="duty-page__summary-title">总工时</text>
+            <text class="duty-page__summary-value">{{totalHoursText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="duty-page__section-card">
+        <view class="duty-page__section-head">
+          <text class="duty-page__section-title">当日排班</text>
+          <text class="duty-page__section-subtitle">{{selectedDateLabel}}</text>
+        </view>
+
+        <view wx:if="{{currentDayAssignments.length > 0}}" class="duty-page__assignment-list">
+          <view wx:for="{{currentDayAssignments}}" wx:key="assignmentId" class="duty-page__assignment-card">
+            <view class="duty-page__assignment-header">
+              <view class="duty-page__assignment-main">
+                <text class="duty-page__assignment-title">{{item.shiftLabel}}</text>
+                <text class="duty-page__assignment-time">{{item.startTime}} - {{item.endTime}}</text>
+              </view>
+            </view>
+            <view class="duty-page__assignment-body">
+              <view class="duty-page__assignment-row">
+                <text class="duty-page__assignment-label">值班成员</text>
+                <text class="duty-page__assignment-value">{{item.memberDisplayText}}</text>
+              </view>
+              <view wx:if="{{item.partnerNames.length > 0}}" class="duty-page__assignment-row">
+                <text class="duty-page__assignment-label">共同值班</text>
+                <text class="duty-page__assignment-value">{{item.partnerDisplayText}}</text>
+              </view>
+            </view>
+            <view class="duty-page__action-row">
+              <button
+                wx:if="{{item.canRequestSwap}}"
+                class="duty-page__action-button"
+                data-assignment-id="{{item.assignmentId}}"
+                data-shift-label="{{item.dateLabel}} {{item.shiftLabel}}"
+                bindtap="handleOpenSwapModal"
+              >
+                申请换班
+              </button>
+              <button
+                wx:if="{{item.canSubmitOvertime}}"
+                class="duty-page__action-button duty-page__action-button--ghost"
+                data-assignment-id="{{item.assignmentId}}"
+                data-shift-label="{{item.dateLabel}} {{item.shiftLabel}}"
+                bindtap="handleOpenOvertimeModal"
+              >
+                登记加班
+              </button>
+            </view>
+          </view>
+        </view>
+
+        <view wx:else class="duty-page__empty-card">
+          <text class="duty-page__empty-text">当前所选日期没有你的值班安排。</text>
+        </view>
+      </view>
+
+      <view class="duty-page__section-card">
+        <view class="duty-page__section-head">
+          <text class="duty-page__section-title">未来班次</text>
+          <text class="duty-page__section-subtitle">未来 14 天</text>
+        </view>
+
+        <view wx:if="{{upcomingScheduleDays.length > 0}}" class="duty-page__day-list">
+          <view wx:for="{{upcomingScheduleDays}}" wx:key="date" class="duty-page__panel-card">
+            <text class="duty-page__section-subtitle">{{item.dateLabel}}</text>
+            <view class="duty-page__assignment-list">
+              <view wx:for="{{item.assignments}}" wx:key="assignmentId" class="duty-page__assignment-card duty-page__assignment-card--muted">
+                <view class="duty-page__assignment-main">
+                  <text class="duty-page__assignment-title">{{item.shiftLabel}}</text>
+                  <text class="duty-page__assignment-time">{{item.startTime}} - {{item.endTime}}</text>
+                </view>
+                <view class="duty-page__assignment-body">
+                  <view class="duty-page__assignment-row">
+                    <text class="duty-page__assignment-label">共同值班</text>
+                    <text class="duty-page__assignment-value">{{item.partnerDisplayText}}</text>
+                  </view>
+                </view>
+                <view class="duty-page__action-row">
+                  <button
+                    wx:if="{{item.canRequestSwap}}"
+                    class="duty-page__action-button"
+                    data-assignment-id="{{item.assignmentId}}"
+                    data-shift-label="{{item.dateLabel}} {{item.shiftLabel}}"
+                    bindtap="handleOpenSwapModal"
+                  >
+                    申请换班
+                  </button>
+                  <button
+                    wx:if="{{item.canSubmitOvertime}}"
+                    class="duty-page__action-button duty-page__action-button--ghost"
+                    data-assignment-id="{{item.assignmentId}}"
+                    data-shift-label="{{item.dateLabel}} {{item.shiftLabel}}"
+                    bindtap="handleOpenOvertimeModal"
+                  >
+                    登记加班
+                  </button>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view wx:else class="duty-page__empty-card">
+          <text class="duty-page__empty-text">未来两周暂时没有你的值班安排。</text>
+        </view>
+      </view>
+
+      <view wx:if="{{pendingPeerSwapRequests.length > 0}}" class="duty-page__section-card">
+        <view class="duty-page__section-head">
+          <text class="duty-page__section-title">待你确认的换班</text>
+        </view>
+        <view class="duty-page__record-list">
+          <view wx:for="{{pendingPeerSwapRequests}}" wx:key="swapRequestId" class="duty-page__record-item">
+            <view class="duty-page__record-main">
+              <text class="duty-page__record-title">{{item.requesterName}} · {{item.originalWorkDate}}</text>
+              <text class="duty-page__record-meta">{{item.originalShiftLabel}} · {{item.originalTimeRange}}</text>
+              <text wx:if="{{item.reason}}" class="duty-page__record-meta">原因：{{item.reason}}</text>
+            </view>
+            <view class="duty-page__action-row">
+              <button class="duty-page__inline-button" data-swap-request-id="{{item.swapRequestId}}" data-decision="reject" bindtap="handlePeerReviewSwap">拒绝</button>
+              <button class="duty-page__action-button" data-swap-request-id="{{item.swapRequestId}}" data-decision="confirm" bindtap="handlePeerReviewSwap">确认</button>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="duty-page__section-card">
+        <view class="duty-page__section-head">
+          <text class="duty-page__section-title">我的换班记录</text>
+        </view>
+        <view wx:if="{{mySwapRequests.length > 0}}" class="duty-page__record-list">
+          <view wx:for="{{mySwapRequests}}" wx:key="swapRequestId" class="duty-page__record-item">
+            <view class="duty-page__record-main">
+              <text class="duty-page__record-title">{{item.originalWorkDate}} · {{item.originalShiftLabel}}</text>
+              <text class="duty-page__record-meta">{{item.originalTimeRange}} · 对方：{{item.targetUserName || '待指定'}}</text>
+            </view>
+            <view class="duty-page__status-chip duty-page__status-chip--{{item.status}}">{{item.statusLabel}}</view>
+          </view>
+        </view>
+        <view wx:else class="duty-page__empty-card">
+          <text class="duty-page__empty-text">当前还没有你发起的换班申请。</text>
+        </view>
+      </view>
+
+      <view class="duty-page__section-card">
+        <view class="duty-page__section-head">
+          <text class="duty-page__section-title">我的加班记录</text>
+        </view>
+        <view wx:if="{{myOvertimeRecords.length > 0}}" class="duty-page__record-list">
+          <view wx:for="{{myOvertimeRecords}}" wx:key="overtimeId" class="duty-page__record-item">
+            <view class="duty-page__record-main">
+              <text class="duty-page__record-title">{{item.workDate}} · {{item.shiftLabel}}</text>
+              <text class="duty-page__record-meta">{{item.timeRange}} · {{item.durationMinutes}} 分钟</text>
+              <text wx:if="{{item.reason}}" class="duty-page__record-meta">原因：{{item.reason}}</text>
+            </view>
+            <view class="duty-page__status-chip duty-page__status-chip--{{item.status}}">{{item.statusLabel}}</view>
+          </view>
+        </view>
+        <view wx:else class="duty-page__empty-card">
+          <text class="duty-page__empty-text">当前还没有你的加班记录。</text>
+        </view>
+      </view>
+    </view>
+
+    <bottom-nav items="{{navItems}}" activeKey="{{activeNavKey}}" bind:change="handleNavChange" />
+
+    <view wx:if="{{modalType === 'swap'}}" class="duty-page__modal-mask" bindtap="handleCloseModal">
+      <view class="duty-page__modal" catchtap="noop">
+        <view class="duty-page__modal-head">
+          <text class="duty-page__modal-title">申请换班</text>
+          <button class="duty-page__modal-close" bindtap="handleCloseModal">×</button>
+        </view>
+        <view class="duty-page__modal-body">
+          <text class="duty-page__modal-copy">{{modalShiftLabel}}</text>
+          <view class="duty-page__field">
+            <text class="duty-page__field-label">接替对象</text>
+            <picker range="{{swapPickerItems}}" range-key="label" value="{{swapTargetIndex}}" bindchange="handleSwapTargetChange">
+              <view class="duty-page__picker">
+                <text class="duty-page__picker-value">{{swapTargetLabel}}</text>
+                <text class="duty-page__picker-arrow">⌄</text>
+              </view>
+            </picker>
+          </view>
+          <view class="duty-page__field">
+            <text class="duty-page__field-label">原因说明</text>
+            <textarea class="duty-page__textarea" maxlength="500" value="{{swapReason}}" bindinput="handleSwapReasonInput" placeholder="可留空，建议说明换班原因"></textarea>
+          </view>
+        </view>
+        <view class="duty-page__modal-actions">
+          <button class="duty-page__modal-button duty-page__modal-button--ghost" bindtap="handleCloseModal">取消</button>
+          <button class="duty-page__modal-button duty-page__modal-button--primary" bindtap="handleSubmitSwap">提交</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{modalType === 'overtime'}}" class="duty-page__modal-mask" bindtap="handleCloseModal">
+      <view class="duty-page__modal" catchtap="noop">
+        <view class="duty-page__modal-head">
+          <text class="duty-page__modal-title">登记加班</text>
+          <button class="duty-page__modal-close" bindtap="handleCloseModal">×</button>
+        </view>
+        <view class="duty-page__modal-body">
+          <text class="duty-page__modal-copy">{{modalShiftLabel}}</text>
+          <view class="duty-page__field">
+            <text class="duty-page__field-label">加班时长</text>
+            <picker range="{{overtimeDurationItems}}" range-key="label" value="{{overtimeDurationIndex}}" bindchange="handleOvertimeDurationChange">
+              <view class="duty-page__picker">
+                <text class="duty-page__picker-value">{{overtimeDurationLabel}}</text>
+                <text class="duty-page__picker-arrow">⌄</text>
+              </view>
+            </picker>
+          </view>
+          <view class="duty-page__field">
+            <text class="duty-page__field-label">原因说明</text>
+            <textarea class="duty-page__textarea" maxlength="500" value="{{overtimeReason}}" bindinput="handleOvertimeReasonInput" placeholder="请简要说明加班原因"></textarea>
+          </view>
+        </view>
+        <view class="duty-page__modal-actions">
+          <button class="duty-page__modal-button duty-page__modal-button--ghost" bindtap="handleCloseModal">取消</button>
+          <button class="duty-page__modal-button duty-page__modal-button--primary" bindtap="handleSubmitOvertime">提交</button>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="duty-page__guard">
+      <state-view type="error" title="{{guardTitle}}" description="{{guardDescription}}" actionLabel="Back" bind:action="handleReturnToEntry" />
+    </view>
+  </block>
+</view>

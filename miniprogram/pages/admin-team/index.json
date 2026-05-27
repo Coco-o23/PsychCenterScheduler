@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "app-top-bar": "/components/app-top-bar/index",
+    "bottom-nav": "/components/bottom-nav/index",
+    "confirm-dialog": "/components/confirm-dialog/index",
+    "member-card": "/components/member-card/index",
+    "state-view": "/components/state-view/index",
+    "status-chip": "/components/status-chip/index"
+  }
+}

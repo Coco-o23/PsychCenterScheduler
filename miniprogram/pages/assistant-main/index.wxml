@@ -1,0 +1,177 @@
+<view class="collection-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar eyebrow="{{pageEyebrow}}" title="{{pageTitle}}" />
+
+    <view class="collection-page__content">
+      <view class="surface-card collection-page__hero collection-page__hero--compact">
+        <text class="collection-page__hero-title">{{collectionTitle}}</text>
+        <text class="collection-page__hero-copy collection-page__hero-copy--tight">{{collectionWeekLabel}}</text>
+      </view>
+
+      <button
+        class="surface-card collection-page__entry-card"
+        hover-class="button-reset-hover"
+        bindtap="handleOpenNotifications"
+      >
+        <view class="collection-page__entry-card-main">
+          <text class="collection-page__summary-title">通知</text>
+          <text class="collection-page__helper-text">查看填报提醒、排班发布和审批结果</text>
+        </view>
+        <text class="collection-page__entry-card-action">进入</text>
+      </button>
+
+      <block wx:if="{{requestState === 'loading'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">加载中</text>
+          <text class="collection-page__empty-copy">正在同步本周填报任务和默认值。</text>
+        </view>
+      </block>
+
+      <block wx:elif="{{requestState === 'error'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">加载失败</text>
+          <text class="collection-page__empty-copy">请确认本地后端服务和数据库状态。</text>
+        </view>
+      </block>
+
+      <block wx:elif="{{collectionStatus === 'none'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">暂无进行中的填报任务</text>
+          <text class="collection-page__empty-copy">管理员发布新的收集任务后，这里会自动出现下一周的时间格子。</text>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view
+          wx:if="{{isSchedulePublishedForCurrentCollection}}"
+          class="surface-card collection-page__submitted-card collection-page__published-card"
+          bindtap="handleGoToDutyPage"
+        >
+          <view class="collection-page__submitted-toggle">
+            <view class="collection-page__submitted-toggle-main">
+              <text class="collection-page__summary-title">本轮已完成排班，进入日程页查看</text>
+              <text class="collection-page__helper-text">本轮空闲时间收集已关闭，新的收集任务发布后才会重新出现。</text>
+            </view>
+            <text class="collection-page__submitted-toggle-action">查看</text>
+          </view>
+        </view>
+
+        <view
+          wx:elif="{{submittedSummaryVisible}}"
+          class="surface-card collection-page__submitted-card"
+        >
+          <button
+            class="collection-page__submitted-toggle"
+            hover-class="button-reset-hover"
+            bindtap="handleToggleSubmittedSummary"
+          >
+            <view class="collection-page__submitted-toggle-main">
+              <text class="collection-page__summary-title">本轮已提交空闲时间填报</text>
+              <text wx:if="{{submittedAtText}}" class="collection-page__helper-text">{{submittedAtText}}</text>
+            </view>
+            <text class="collection-page__submitted-toggle-action">{{submittedSummaryExpanded ? '收起' : '展开'}}</text>
+          </button>
+
+          <view wx:if="{{submittedSummaryExpanded}}" class="collection-page__submitted-list">
+            <view wx:for="{{submittedSummaryLines}}" wx:key="*this" class="collection-page__submitted-item">
+              <text class="collection-page__submitted-meta">{{item}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{!isSchedulePublishedForCurrentCollection}}" class="surface-card collection-page__fill-card">
+          <view class="collection-page__fill-options">
+            <view class="collection-page__toggle-row">
+              <view class="collection-page__toggle-main">
+                <text class="collection-page__toggle-title">下周整周请假</text>
+                <text class="collection-page__toggle-desc">开启后本周所有班次都会视为没空。</text>
+              </view>
+              <view class="collection-page__switch {{isWeekLeave ? 'collection-page__switch--active' : ''}}" bindtap="handleToggleWeekLeave">
+                <view class="collection-page__switch-thumb"></view>
+              </view>
+            </view>
+
+            <view class="collection-page__select-row collection-page__select-row--divider">
+              <view class="collection-page__select-main">
+                <text class="collection-page__select-title">每周最高排班数</text>
+                <text class="collection-page__select-desc">您每周愿意接受的最多次数</text>
+              </view>
+              <picker
+                mode="selector"
+                range="{{maxWeeklyShiftOptions}}"
+                range-key="label"
+                value="{{maxWeeklyShiftIndex}}"
+                bindchange="handleMaxWeeklyShiftChange"
+              >
+                <view class="collection-page__picker-trigger">
+                  <text class="collection-page__picker-value">{{selectedMaxWeeklyShiftLabel}}</text>
+                  <text class="collection-page__picker-arrow">∨</text>
+                </view>
+              </picker>
+            </view>
+
+            <view class="collection-page__toggle-row collection-page__toggle-row--divider">
+              <view class="collection-page__toggle-main">
+                <text class="collection-page__toggle-title">设为默认空闲时间</text>
+                <text class="collection-page__toggle-desc">未来填报将自动使用本次选择。</text>
+              </view>
+              <view class="collection-page__switch {{saveAsDefault ? 'collection-page__switch--active' : ''}}" bindtap="handleToggleSaveDefault">
+                <view class="collection-page__switch-thumb"></view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <text wx:if="{{!isSchedulePublishedForCurrentCollection}}" class="collection-page__section-title">本周时间格子</text>
+
+        <view wx:if="{{!isSchedulePublishedForCurrentCollection}}" wx:for="{{fillDays}}" wx:key="date" class="surface-card collection-page__day-card">
+          <text class="collection-page__day-title">{{item.label}} {{item.displayDate}}</text>
+          <view class="collection-page__slot-grid">
+            <button
+              wx:for="{{item.slots}}"
+              wx:key="key"
+              wx:for-item="slotItem"
+              class="collection-page__slot-button {{slotItem.isAvailable ? 'collection-page__slot-button--active' : ''}} {{isWeekLeave ? 'collection-page__slot-button--disabled' : ''}}"
+              hover-class="button-reset-hover"
+              data-key="{{slotItem.key}}"
+              bindtap="handleToggleSlot"
+            >
+              <text class="collection-page__slot-time">{{slotItem.timeRange}}</text>
+              <text class="collection-page__slot-state">{{slotItem.isAvailable && !isWeekLeave ? '有空' : '没空'}}</text>
+            </button>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <block wx:if="{{collectionStatus !== 'none' && requestState === 'ready' && !isSchedulePublishedForCurrentCollection}}">
+      <view class="collection-page__bottom-action">
+        <button
+          class="collection-page__primary-button collection-page__bottom-submit"
+          hover-class="button-reset-hover"
+          bindtap="handleSubmit"
+        >
+          提交填报
+        </button>
+      </view>
+    </block>
+
+    <bottom-nav
+      items="{{navItems}}"
+      activeKey="{{activeNavKey}}"
+      bind:change="handleNavChange"
+    />
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="collection-page__content">
+      <state-view
+        type="error"
+        title="{{guardTitle}}"
+        description="{{guardDescription}}"
+        actionLabel="Back"
+        bind:action="handleReturnToEntry"
+      />
+    </view>
+  </block>
+</view>

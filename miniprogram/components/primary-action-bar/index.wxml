@@ -1,0 +1,4 @@
+<view class="action-bar">
+  <button wx:if="{{secondaryLabel}}" class="action-bar__secondary" hover-class="action-bar__secondary--hover" bindtap="handleSecondary">{{secondaryLabel}}</button>
+  <button class="action-bar__primary {{disabled ? 'action-bar__primary--disabled' : ''}}" hover-class="action-bar__primary--hover" bindtap="handlePrimary">{{label}}</button>
+</view>

@@ -1,0 +1,6 @@
+<view class="state state--{{type}}">
+  <view class="state__icon">{{type == 'loading' ? '...' : type == 'error' ? '!' : '-'}}</view>
+  <text class="state__title">{{title}}</text>
+  <text class="state__desc">{{description}}</text>
+  <button wx:if="{{actionLabel}}" class="state__action" hover-class="state__action--hover" bindtap="handleAction">{{actionLabel}}</button>
+</view>

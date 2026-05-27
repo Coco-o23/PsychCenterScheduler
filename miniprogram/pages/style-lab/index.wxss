@@ -1,0 +1,102 @@
+.style-page {
+  padding: 48rpx 32rpx 64rpx;
+}
+
+.style-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.style-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.section-title {
+  display: block;
+}
+
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.swatch-card {
+  min-height: 168rpx;
+  padding: var(--space-3);
+}
+
+.swatch-chip {
+  width: 100%;
+  height: 56rpx;
+  margin-bottom: var(--space-2);
+  border: 2rpx solid rgba(193, 198, 214, 0.48);
+  border-radius: var(--radius-md);
+}
+
+.swatch-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.typography-card,
+.controls-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.duty-card {
+  position: relative;
+  min-height: 196rpx;
+  overflow: hidden;
+}
+
+.duty-card__accent {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 8rpx;
+  background: var(--color-primary-container);
+}
+
+.duty-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-4) var(--space-4) 40rpx;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.slot-title {
+  color: var(--color-on-surface);
+  font-size: var(--font-size-body-md);
+  font-weight: 700;
+  line-height: var(--line-height-body-md);
+}
+
+.slot-meta {
+  margin-top: 4rpx;
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-label-md);
+  line-height: var(--line-height-label-md);
+}

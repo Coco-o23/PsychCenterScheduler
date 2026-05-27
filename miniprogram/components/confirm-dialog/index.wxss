@@ -1,0 +1,80 @@
+@import "../../styles/tokens.wxss";
+
+.dialog-mask {
+  position: fixed;
+  z-index: 120;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+  background: rgba(25, 28, 35, 0.42);
+}
+
+.dialog {
+  width: 100%;
+  max-width: 680rpx;
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-modal);
+}
+
+.dialog__title,
+.dialog__message {
+  display: block;
+}
+
+.dialog__title {
+  color: var(--color-on-surface);
+  font-size: var(--font-size-headline-md);
+  font-weight: 700;
+  line-height: var(--line-height-headline-md);
+}
+
+.dialog__message {
+  margin-top: var(--space-2);
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.dialog__actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.dialog__cancel,
+.dialog__confirm {
+  flex: 1;
+  min-height: 88rpx;
+  margin: 0;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body-md);
+  font-weight: 700;
+}
+
+.dialog__cancel::after,
+.dialog__confirm::after {
+  border: 0;
+}
+
+.dialog__cancel {
+  border: 2rpx solid var(--color-outline-variant);
+  background: var(--color-surface-container-lowest);
+  color: var(--color-on-surface);
+}
+
+.dialog__confirm--primary {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary);
+}
+
+.dialog__confirm--danger {
+  background: var(--color-error);
+  color: var(--color-on-primary);
+}

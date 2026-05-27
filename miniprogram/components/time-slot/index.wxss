@@ -1,0 +1,62 @@
+@import "../../styles/tokens.wxss";
+
+.slot {
+  display: flex;
+  min-height: 108rpx;
+  margin: 0;
+  padding: var(--space-2);
+  flex-direction: column;
+  justify-content: center;
+  border: 2rpx solid var(--color-outline-variant);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-container-lowest);
+  text-align: left;
+}
+
+.slot::after {
+  border: 0;
+}
+
+.slot__title,
+.slot__subtitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slot__title {
+  color: var(--color-on-surface);
+  font-size: var(--font-size-body-md);
+  font-weight: 700;
+  line-height: var(--line-height-body-md);
+}
+
+.slot__subtitle {
+  margin-top: 4rpx;
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-label-md);
+  line-height: var(--line-height-label-md);
+}
+
+.slot--available {
+  border-color: rgba(0, 110, 44, 0.38);
+  background: #ecfdf1;
+}
+
+.slot--selected {
+  border-color: var(--color-secondary);
+  background: var(--color-secondary-container);
+}
+
+.slot--warning {
+  border-color: rgba(158, 67, 0, 0.42);
+  background: var(--color-tertiary-container);
+}
+
+.slot--disabled {
+  opacity: 0.64;
+}
+
+.slot--hover {
+  opacity: 0.92;
+}

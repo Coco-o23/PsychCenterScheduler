@@ -1,0 +1,70 @@
+<view class="notifications-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar
+      title="通知"
+      subtitle="未读 {{unreadCount}}"
+      showBack="{{true}}"
+      actionLabel="刷新"
+      bind:back="handleBack"
+      bind:action="handleRefresh"
+    />
+
+    <view class="notifications-page__content">
+      <block wx:if="{{requestState === 'loading'}}">
+        <view class="notifications-page__empty-card">
+          <text class="notifications-page__empty-title">Loading notifications</text>
+          <text class="notifications-page__empty-copy">We are syncing recent reminders now.</text>
+        </view>
+      </block>
+
+      <block wx:elif="{{requestState === 'error'}}">
+        <view class="notifications-page__empty-card">
+          <text class="notifications-page__empty-title">Failed to load</text>
+          <text class="notifications-page__empty-copy">Please refresh after the backend is ready.</text>
+        </view>
+      </block>
+
+      <block wx:elif="{{cards.length === 0}}">
+        <view class="notifications-page__empty-card">
+          <text class="notifications-page__empty-title">No notifications yet</text>
+          <text class="notifications-page__empty-copy">Collection reminders and schedule updates will appear here.</text>
+        </view>
+      </block>
+
+      <block wx:else>
+        <button
+          wx:for="{{cards}}"
+          wx:key="notificationId"
+          class="notifications-page__card"
+          data-id="{{item.notificationId}}"
+          data-path="{{item.targetPath}}"
+          bindtap="handleOpenNotification"
+        >
+          <view class="notifications-page__card-head">
+            <text class="notifications-page__card-title">{{item.title}}</text>
+            <view class="notifications-page__chip {{item.isRead ? 'notifications-page__chip--read' : 'notifications-page__chip--unread'}}">
+              {{item.statusLabel}}
+            </view>
+          </view>
+          <text class="notifications-page__card-copy">{{item.content}}</text>
+          <view class="notifications-page__card-foot">
+            <text class="notifications-page__card-time">{{item.createdAtText}}</text>
+            <text class="notifications-page__card-link">Open</text>
+          </view>
+        </button>
+      </block>
+    </view>
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="notifications-page__content">
+      <state-view
+        type="error"
+        title="{{guardTitle}}"
+        description="{{guardDescription}}"
+        actionLabel="Back"
+        bind:action="handleReturnToEntry"
+      />
+    </view>
+  </block>
+</view>

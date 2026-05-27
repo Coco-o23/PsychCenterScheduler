@@ -1,0 +1,44 @@
+@import "../../styles/tokens.wxss";
+
+.action-bar {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+  background: rgba(249, 249, 255, 0.96);
+  border-top: 2rpx solid rgba(193, 198, 214, 0.52);
+}
+
+.action-bar__primary,
+.action-bar__secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--height-button);
+  margin: 0;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body-md);
+  font-weight: 700;
+  line-height: var(--line-height-body-md);
+}
+
+.action-bar__primary::after,
+.action-bar__secondary::after {
+  border: 0;
+}
+
+.action-bar__primary {
+  flex: 1;
+  background: var(--color-primary-container);
+  color: var(--color-on-primary);
+}
+
+.action-bar__secondary {
+  width: 184rpx;
+  border: 2rpx solid var(--color-outline-variant);
+  background: var(--color-surface-container-lowest);
+  color: var(--color-primary);
+}
+
+.action-bar__primary--disabled {
+  opacity: 0.48;
+}

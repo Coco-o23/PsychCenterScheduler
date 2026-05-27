@@ -1,0 +1,11 @@
+<view class="top-bar" style="padding-top: {{topInset}}px;">
+  <button wx:if="{{showBack}}" class="icon-button" hover-class="icon-button--hover" bindtap="handleBack">
+    <view class="top-bar__back-icon"></view>
+  </button>
+  <view class="top-bar__text">
+    <text wx:if="{{eyebrow}}" class="top-bar__eyebrow">{{eyebrow}}</text>
+    <text class="top-bar__title">{{title}}</text>
+    <text wx:if="{{subtitle}}" class="top-bar__subtitle">{{subtitle}}</text>
+  </view>
+  <button wx:if="{{actionLabel}}" class="top-bar__action" hover-class="top-bar__action--hover" bindtap="handleAction">{{actionLabel}}</button>
+</view>

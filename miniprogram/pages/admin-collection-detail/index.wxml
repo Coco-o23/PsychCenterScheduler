@@ -1,0 +1,190 @@
+<view class="collection-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar
+      eyebrow="收集详情"
+      title="{{title}}"
+      subtitle="{{userName}}"
+      showBack="{{true}}"
+      actionLabel="刷新"
+      bind:back="handleBack"
+      bind:action="handleRefresh"
+    />
+
+    <view class="collection-page__content">
+      <view class="surface-card collection-page__hero collection-page__hero--compact">
+        <text class="collection-page__hero-title">{{title}}</text>
+        <text class="collection-page__hero-copy collection-page__hero-copy--tight">{{weekLabel}}</text>
+      </view>
+
+      <block wx:if="{{requestState === 'loading'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">加载中</text>
+          <text class="collection-page__empty-copy">正在读取各班次可排人员列表。</text>
+        </view>
+      </block>
+
+      <block wx:elif="{{requestState === 'error'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">详情加载失败</text>
+          <text class="collection-page__empty-copy">请确认 collectionId 参数、后端服务和数据库状态。</text>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view class="surface-card collection-page__summary-card">
+          <view class="collection-page__summary-header">
+            <view class="collection-page__summary-main">
+              <text class="collection-page__summary-title">本轮收集进度</text>
+              <text class="collection-page__summary-subtitle">已提交 {{submittedUsers}} / {{totalUsers}} 人</text>
+            </view>
+            <view class="collection-page__status-chip collection-page__status-chip--{{status}}">
+              {{statusLabel}}
+            </view>
+          </view>
+
+          <view class="collection-page__progress-row">
+            <text class="collection-page__helper-text">填报完成度</text>
+            <text class="collection-page__progress-meta">{{progressPercent}}%</text>
+          </view>
+
+          <view class="collection-page__progress-bar">
+            <view
+              class="collection-page__progress-fill {{status === 'completed' ? 'collection-page__progress-fill--completed' : ''}}"
+              style="width: {{progressPercent}}%;"
+            ></view>
+          </view>
+        </view>
+
+        <view wx:for="{{dayGroups}}" wx:key="key" class="collection-page__detail-day">
+          <text class="collection-page__section-title">{{item.dateLabel}}</text>
+
+          <view
+            wx:for="{{item.slots}}"
+            wx:key="key"
+            wx:for-item="slotItem"
+            class="surface-card collection-page__detail-card"
+          >
+            <view class="collection-page__detail-header">
+              <view class="collection-page__summary-main">
+                <text class="collection-page__detail-title">{{slotItem.shiftLabel}}</text>
+                <text class="collection-page__detail-subtitle">
+                  {{slotItem.startTime}} - {{slotItem.endTime}}
+                </text>
+              </view>
+              <view class="collection-page__detail-actions">
+                <view
+                  wx:if="{{slotItem.riskLevel !== 'none'}}"
+                  class="collection-page__risk-chip collection-page__risk-chip--{{slotItem.riskLevel}}"
+                >
+                  {{slotItem.riskLabel}}
+                </view>
+                <button
+                  class="collection-page__secondary-button collection-page__inline-button"
+                  hover-class="button-reset-hover"
+                  data-work-date="{{slotItem.workDate}}"
+                  data-shift-template-id="{{slotItem.shiftTemplateId}}"
+                  data-label="{{slotItem.dateLabel}} {{slotItem.shiftLabel}}"
+                  bindtap="handleOpenAddModal"
+                >
+                  添加成员
+                </button>
+              </view>
+            </view>
+
+            <view class="collection-page__detail-meta">
+              <text class="collection-page__helper-text">
+                当前可排 {{slotItem.countText}} · 最低要求 {{slotItem.minCount}} 人
+              </text>
+            </view>
+
+            <view wx:if="{{slotItem.members.length > 0}}" class="collection-page__member-list">
+              <view
+                wx:for="{{slotItem.members}}"
+                wx:key="userId"
+                wx:for-item="memberItem"
+                class="collection-page__member-chip {{memberItem.isManualAdded ? 'collection-page__member-chip--manual' : ''}}"
+              >
+                <view class="collection-page__member-text">
+                  {{memberItem.name}} · {{memberItem.studentId}}
+                </view>
+                <button
+                  class="collection-page__remove-button"
+                  hover-class="button-reset-hover"
+                  data-work-date="{{slotItem.workDate}}"
+                  data-shift-template-id="{{slotItem.shiftTemplateId}}"
+                  data-user-id="{{memberItem.userId}}"
+                  data-member-name="{{memberItem.name}}"
+                  bindtap="handleRemoveMember"
+                >
+                  移
+                </button>
+              </view>
+            </view>
+
+            <view wx:else class="collection-page__empty-card collection-page__empty-card--compact">
+              <text class="collection-page__empty-copy">当前班次还没有可排成员。</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <bottom-nav
+      items="{{navItems}}"
+      activeKey="{{activeNavKey}}"
+      bind:change="handleNavChange"
+    />
+
+    <view wx:if="{{isModalVisible}}" class="collection-page__modal-mask" catchtap="handleCloseModal">
+      <view class="collection-page__modal" catchtap="noop">
+        <text class="collection-page__modal-title">{{modalTitle}}</text>
+        <text class="collection-page__modal-subtitle">{{modalSubtitle}}</text>
+
+        <view wx:if="{{modalCandidates.length > 0}}" class="collection-page__modal-list">
+          <view wx:for="{{modalCandidates}}" wx:key="userId" class="collection-page__candidate-item">
+            <view class="collection-page__candidate-main">
+              <text class="collection-page__candidate-name">{{item.name}}</text>
+              <text class="collection-page__candidate-meta">
+                {{item.studentId}} · {{item.summary}}
+              </text>
+            </view>
+            <button
+              class="collection-page__primary-button collection-page__candidate-add"
+              hover-class="button-reset-hover"
+              data-user-id="{{item.userId}}"
+              bindtap="handleAddCandidate"
+            >
+              加入
+            </button>
+          </view>
+        </view>
+
+        <view wx:else class="collection-page__empty-card collection-page__empty-card--compact">
+          <text class="collection-page__empty-copy">当前没有可新增的候选成员。</text>
+        </view>
+
+        <view class="collection-page__modal-footer">
+          <button
+            class="collection-page__secondary-button"
+            hover-class="button-reset-hover"
+            bindtap="handleCloseModal"
+          >
+            关闭
+          </button>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="collection-page__content">
+      <state-view
+        type="error"
+        title="{{guardTitle}}"
+        description="{{guardDescription}}"
+        actionLabel="Back"
+        bind:action="handleReturnToEntry"
+      />
+    </view>
+  </block>
+</view>

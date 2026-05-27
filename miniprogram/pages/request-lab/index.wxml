@@ -1,0 +1,88 @@
+<view class="request-lab page-shell">
+  <app-top-bar
+    eyebrow="{{copy.eyebrow}}"
+    title="{{copy.title}}"
+    subtitle="{{copy.subtitle}}"
+  />
+
+  <view class="request-lab__section surface-card">
+    <view class="request-lab__section-head">
+      <text class="request-lab__section-title">{{copy.identityTitle}}</text>
+      <status-chip label="{{selectedIdentityName}}" tone="info" />
+    </view>
+    <view class="request-lab__identity-list">
+      <button
+        wx:for="{{identities}}"
+        wx:key="id"
+        class="request-lab__identity {{item.id == selectedIdentityId ? 'request-lab__identity--active' : ''}}"
+        hover-class="request-lab__identity--hover"
+        data-id="{{item.id}}"
+        bindtap="handleSelectIdentity"
+      >
+        <text class="request-lab__identity-name">{{item.displayName}}</text>
+        <text class="request-lab__identity-meta">{{item.roleLabel}} / {{item.studentNo}}</text>
+      </button>
+    </view>
+  </view>
+
+  <view class="request-lab__section surface-card">
+    <view class="request-lab__section-head">
+      <text class="request-lab__section-title">{{copy.stateTitle}}</text>
+      <status-chip label="{{statusLabel}}" tone="{{statusTone}}" />
+    </view>
+    <state-view
+      type="{{status == 'loading' ? 'loading' : status == 'success' || status == 'empty' ? 'empty' : status == 'idle' ? 'empty' : 'error'}}"
+      title="{{stateTitle}}"
+      description="{{stateDescription}}"
+    />
+  </view>
+
+  <view class="request-lab__section surface-card">
+    <text class="request-lab__section-title">{{copy.scenarioTitle}}</text>
+    <view class="request-lab__scenario-grid">
+      <button
+        wx:for="{{scenarios}}"
+        wx:key="key"
+        class="request-lab__scenario"
+        hover-class="request-lab__scenario--hover"
+        data-scenario="{{item.key}}"
+        bindtap="handleRunScenario"
+      >
+        <status-chip label="{{item.label}}" tone="{{item.tone}}" />
+        <text class="request-lab__scenario-desc">{{item.description}}</text>
+      </button>
+    </view>
+  </view>
+
+  <view class="request-lab__section surface-card">
+    <text class="request-lab__section-title">全局状态</text>
+    <view class="request-lab__rows">
+      <view wx:for="{{sessionRows}}" wx:key="label" class="request-lab__row">
+        <text class="request-lab__row-label">{{item.label}}</text>
+        <text class="request-lab__row-value">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="request-lab__section surface-card">
+    <text class="request-lab__section-title">{{copy.headerTitle}}</text>
+    <view class="request-lab__rows">
+      <view wx:if="{{!headerRows.length}}" class="request-lab__empty-line">运行场景后显示请求头</view>
+      <view wx:for="{{headerRows}}" wx:key="label" class="request-lab__row">
+        <text class="request-lab__row-label">{{item.label}}</text>
+        <text class="request-lab__row-value">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="request-lab__section surface-card">
+    <text class="request-lab__section-title">{{copy.resultTitle}}</text>
+    <view class="request-lab__rows">
+      <view wx:if="{{!resultRows.length}}" class="request-lab__empty-line">运行场景后显示统一响应</view>
+      <view wx:for="{{resultRows}}" wx:key="label" class="request-lab__row">
+        <text class="request-lab__row-label">{{item.label}}</text>
+        <text class="request-lab__row-value">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+</view>

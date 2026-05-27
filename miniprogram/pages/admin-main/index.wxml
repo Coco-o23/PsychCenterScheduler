@@ -1,0 +1,199 @@
+<view class="collection-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar
+      eyebrow="中心管理"
+      title="值班管理"
+      subtitle="{{userName}}"
+      actionLabel="本人填报"
+      bind:action="handleOpenOwnAvailability"
+    />
+
+    <view class="collection-page__content">
+      <view class="surface-card collection-page__hero collection-page__hero--compact">
+        <text class="collection-page__hero-title">{{collectionTitle}}</text>
+        <text class="collection-page__hero-copy collection-page__hero-copy--tight">{{collectionWeekLabel}}</text>
+      </view>
+
+      <button
+        class="surface-card collection-page__entry-card"
+        hover-class="button-reset-hover"
+        bindtap="handleOpenNotifications"
+      >
+        <view class="collection-page__entry-card-main">
+          <text class="collection-page__summary-title">通知</text>
+          <text class="collection-page__helper-text">查看填报提醒、排班发布和审批结果</text>
+        </view>
+        <text class="collection-page__entry-card-action">进入</text>
+      </button>
+
+      <block wx:if="{{requestState === 'loading'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">加载中</text>
+          <text class="collection-page__empty-copy">正在读取本周收集状态与成员进度。</text>
+        </view>
+      </block>
+
+      <block wx:elif="{{requestState === 'error'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">加载失败</text>
+          <text class="collection-page__empty-copy">请确认后端服务和本地数据库都已启动。</text>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view class="surface-card collection-page__summary-card">
+          <view class="collection-page__summary-header">
+            <view class="collection-page__summary-main">
+              <text class="collection-page__summary-title">空闲时间填报收集</text>
+              <text class="collection-page__summary-subtitle">{{statusNote}}</text>
+            </view>
+            <text class="collection-page__status-chip collection-page__status-chip--{{collectionStatus}}">{{collectionStatusLabel}}</text>
+          </view>
+
+          <view wx:if="{{collectionStatus === 'active' || collectionStatus === 'completed'}}" class="collection-page__progress-row">
+            <text class="collection-page__helper-text">收集进度</text>
+            <text class="collection-page__progress-meta">{{progressPercent}}%</text>
+          </view>
+
+          <view wx:if="{{collectionStatus === 'active' || collectionStatus === 'completed'}}" class="collection-page__progress-bar">
+            <view class="collection-page__progress-fill {{collectionStatus === 'completed' ? 'collection-page__progress-fill--completed' : ''}}" style="width: {{progressPercent}}%;"></view>
+          </view>
+
+          <view class="collection-page__count-grid">
+            <view class="collection-page__count-item">
+              <text class="collection-page__count-label">应填报人数</text>
+              <text class="collection-page__count-value">{{totalUsers}}</text>
+            </view>
+            <view class="collection-page__count-item">
+              <text class="collection-page__count-label">已填报人数</text>
+              <text class="collection-page__count-value">{{submittedUsers}}</text>
+            </view>
+          </view>
+
+          <view class="collection-page__button-row">
+            <button
+              wx:if="{{canPublish}}"
+              class="collection-page__primary-button"
+              hover-class="button-reset-hover"
+              bindtap="handlePublishCollection"
+            >
+              发布本周收集
+            </button>
+            <button
+              wx:elif="{{currentCollectionId}}"
+              class="collection-page__primary-button"
+              hover-class="button-reset-hover"
+              bindtap="handleOpenCollectionDetail"
+            >
+              详情管理
+            </button>
+            <button
+              wx:if="{{collectionStatus === 'active'}}"
+              class="collection-page__secondary-button"
+              hover-class="button-reset-hover"
+              bindtap="handleRepublishCollection"
+            >
+              {{republishButtonLabel}}
+            </button>
+            <button
+              wx:if="{{collectionStatus === 'completed'}}"
+              class="collection-page__secondary-button"
+              hover-class="button-reset-hover"
+              bindtap="handleShowStage10Hint"
+            >
+              生成排班表
+            </button>
+          </view>
+        </view>
+
+        <view class="surface-card collection-page__summary-card">
+          <text class="collection-page__section-title">本周班次结构</text>
+          <view class="collection-page__submitted-list">
+            <view wx:for="{{shiftSummaries}}" wx:key="key" class="collection-page__submitted-item">
+              <view>
+                <text class="collection-page__submitted-name">{{item.title}}</text>
+                <text class="collection-page__submitted-meta">{{item.detail}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{currentCollectionId}}" class="surface-card collection-page__summary-card">
+          <view class="collection-page__submitted-section-header">
+            <text class="collection-page__section-title">未填报助理</text>
+            <button
+              wx:if="{{unsubmittedMembersPreview.length > 3}}"
+              class="collection-page__ghost-button collection-page__collapse-toggle"
+              hover-class="button-reset-hover"
+              bindtap="handleToggleUnsubmittedMembers"
+            >
+              {{unsubmittedMembersExpanded ? '收起' : '展开'}}
+            </button>
+          </view>
+          <view class="collection-page__submitted-list">
+            <view
+              wx:for="{{visibleUnsubmittedMembersPreview}}"
+              wx:key="userId"
+              class="collection-page__submitted-item"
+            >
+              <view>
+                <text class="collection-page__submitted-name">{{item.name}}</text>
+                <text class="collection-page__submitted-meta">{{item.studentId}}</text>
+              </view>
+            </view>
+            <view wx:if="{{unsubmittedMembersPreview.length === 0}}" class="collection-page__empty-card collection-page__empty-card--compact">
+              <text class="collection-page__empty-copy">当前所有助理均已完成填报。</text>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{currentCollectionId}}" class="surface-card collection-page__summary-card">
+          <view class="collection-page__submitted-section-header">
+            <text class="collection-page__section-title">已填报助理</text>
+            <button
+              wx:if="{{submittedMembersPreview.length > 3}}"
+              class="collection-page__ghost-button collection-page__collapse-toggle"
+              hover-class="button-reset-hover"
+              bindtap="handleToggleSubmittedMembers"
+            >
+              {{submittedMembersExpanded ? '收起' : '展开'}}
+            </button>
+          </view>
+          <view class="collection-page__submitted-list">
+            <view
+              wx:for="{{visibleSubmittedMembersPreview}}"
+              wx:key="userId"
+              class="collection-page__submitted-item"
+            >
+              <view>
+                <text class="collection-page__submitted-name">{{item.name}}</text>
+                <text class="collection-page__submitted-meta">{{item.studentId}}</text>
+              </view>
+            </view>
+            <view wx:if="{{submittedMembersPreview.length === 0}}" class="collection-page__empty-card collection-page__empty-card--compact">
+              <text class="collection-page__empty-copy">当前还没有助理完成本轮填报。</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <bottom-nav
+      items="{{navItems}}"
+      activeKey="{{activeNavKey}}"
+      bind:change="handleNavChange"
+    />
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="collection-page__content">
+      <state-view
+        type="error"
+        title="{{guardTitle}}"
+        description="{{guardDescription}}"
+        actionLabel="Back"
+        bind:action="handleReturnToEntry"
+      />
+    </view>
+  </block>
+</view>

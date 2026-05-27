@@ -1,0 +1,290 @@
+<view class="profile-page surface-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar title="个人中心" subtitle="{{userName}}" />
+
+    <view class="profile-page__content">
+      <view class="profile-page__profile-card">
+        <view class="profile-page__profile-accent"></view>
+        <view class="profile-page__profile-avatar">{{avatarText}}</view>
+        <view class="profile-page__profile-main">
+          <text class="profile-page__profile-name">{{userName}}</text>
+          <text class="profile-page__profile-line">学号：{{studentId}}</text>
+          <text class="profile-page__profile-line">身份：{{roleLabel}}</text>
+          <text class="profile-page__profile-line">学院：{{college}} / 年级：{{grade}}</text>
+        </view>
+      </view>
+
+      <view class="profile-page__section-head">
+        <text class="profile-page__section-title">默认空闲时间</text>
+        <button class="profile-page__link-button" data-type="availability" bindtap="openModal">更新设置</button>
+      </view>
+
+      <view class="profile-page__grid-card">
+        <view class="profile-page__grid-head">
+          <text wx:for="{{availabilityHeadDays}}" wx:key="value" class="profile-page__grid-head-cell">{{item.shortLabel}}</text>
+        </view>
+        <view wx:for="{{availabilityRows}}" wx:key="label" wx:for-item="row" class="profile-page__grid-row">
+          <view wx:for="{{row.cells}}" wx:key="weekday" wx:for-item="cell" class="profile-page__grid-cell {{cell.active ? 'profile-page__grid-cell--active' : ''}}">
+            <view wx:if="{{cell.active}}" class="profile-page__grid-dot"></view>
+          </view>
+        </view>
+      </view>
+
+      <view class="profile-page__section-label">系统设置</view>
+      <view class="profile-page__settings-card">
+        <button class="profile-page__setting-row" data-type="semester" bindtap="openModal">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">学期设置</text>
+            <text class="profile-page__setting-summary">{{semesterSummary}}</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+
+        <button class="profile-page__setting-row" data-type="workdays" bindtap="openModal">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">每周工作时间</text>
+            <text class="profile-page__setting-summary">{{workdaysSummary}}</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+
+        <button class="profile-page__setting-row" data-type="shifts" bindtap="openModal">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">默认班次安排</text>
+            <text class="profile-page__setting-summary">{{shiftsSummary}}</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+
+        <button class="profile-page__setting-row" data-type="overrides" bindtap="openModal">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">特殊日期</text>
+            <text class="profile-page__setting-summary">{{overridesSummary}}</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+
+        <button class="profile-page__setting-row" data-type="export" bindtap="openModal">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">导出位置</text>
+            <text class="profile-page__setting-summary">{{exportDirectorySummary}}</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+      </view>
+
+      <view class="profile-page__section-label">提醒与会话</view>
+      <view class="profile-page__settings-card">
+        <button class="profile-page__setting-row" bindtap="handleNotificationEntry">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">站内通知</text>
+            <text class="profile-page__setting-summary">{{notificationSummary}}</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+
+        <button class="profile-page__setting-row" bindtap="handleLogout">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">退出测试身份</text>
+            <text class="profile-page__setting-summary">返回分流页，重新选择角色进入</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+      </view>
+
+      <text class="profile-page__inline-note">密码与邮箱暂不在本页维护。年级升级将按学号和当前学期规则自动处理，异常情况后续会汇总到通知中心。</text>
+    </view>
+
+    <view wx:if="{{modalType}}" class="profile-page__modal-mask" bindtap="closeModal">
+      <view class="profile-page__modal" catchtap="noop">
+        <view class="profile-page__modal-head">
+          <text class="profile-page__modal-title">
+            {{modalType === 'availability' ? '默认空闲时间' : modalType === 'semester' ? '学期设置' : modalType === 'workdays' ? '每周工作时间' : modalType === 'shifts' ? '默认班次安排' : modalType === 'export' ? '导出位置' : '特殊日期'}}
+          </text>
+          <button class="profile-page__modal-close" bindtap="closeModal">×</button>
+        </view>
+
+        <block wx:if="{{modalType === 'availability'}}">
+          <view class="profile-page__modal-body">
+            <text class="profile-page__modal-copy">请维护成员默认可值班的时间。绿色表示默认有空，白色表示默认不排。</text>
+            <view class="profile-page__availability-editor">
+              <view class="profile-page__availability-head">
+                <view class="profile-page__availability-label-cell"></view>
+                <text wx:for="{{availabilityHeadDays}}" wx:key="value" class="profile-page__availability-head-cell">{{item.shortLabel}}</text>
+              </view>
+              <view wx:for="{{availabilityRows}}" wx:key="label" wx:for-item="row" class="profile-page__availability-row">
+                <view class="profile-page__availability-label-cell">{{row.label}}</view>
+                <button
+                  wx:for="{{row.cells}}"
+                  wx:key="weekday"
+                  wx:for-item="cell"
+                  class="profile-page__availability-cell {{cell.active ? 'profile-page__availability-cell--active' : ''}}"
+                  data-shift-index="{{row.shiftIndex}}"
+                  data-weekday="{{cell.weekday}}"
+                  bindtap="handleToggleAvailabilityCell"
+                >
+                  <view wx:if="{{cell.active}}" class="profile-page__availability-dot"></view>
+                </button>
+              </view>
+            </view>
+          </view>
+          <view class="profile-page__modal-actions">
+            <button class="profile-page__modal-button profile-page__modal-button--ghost" bindtap="closeModal">取消</button>
+            <button class="profile-page__modal-button profile-page__modal-button--primary" bindtap="handleSaveAvailability">保存设置</button>
+          </view>
+        </block>
+
+        <block wx:elif="{{modalType === 'semester'}}">
+          <view class="profile-page__modal-body">
+            <view class="profile-page__field">
+              <text class="profile-page__field-label">学期名称</text>
+              <input class="profile-page__input token-input" value="{{semesterForm.name}}" data-field="name" bindinput="handleSemesterInput" placeholder="例如：2026 春季学期" />
+            </view>
+            <view class="profile-page__field-grid">
+              <view class="profile-page__field">
+                <text class="profile-page__field-label">第 1 教学周起始日期</text>
+                <input class="profile-page__input token-input" value="{{semesterForm.firstWeekStartDate}}" data-field="firstWeekStartDate" bindinput="handleSemesterInput" placeholder="YYYY-MM-DD" />
+              </view>
+              <view class="profile-page__field">
+                <text class="profile-page__field-label">总周数</text>
+                <input class="profile-page__input token-input" type="number" value="{{semesterForm.totalWeeksText}}" data-field="totalWeeksText" bindinput="handleSemesterInput" placeholder="18" />
+              </view>
+            </view>
+          </view>
+          <view class="profile-page__modal-actions">
+            <button class="profile-page__modal-button profile-page__modal-button--ghost" bindtap="closeModal">取消</button>
+            <button class="profile-page__modal-button profile-page__modal-button--primary" bindtap="handleSaveSemester">保存</button>
+          </view>
+        </block>
+
+        <block wx:elif="{{modalType === 'workdays'}}">
+          <view class="profile-page__modal-body">
+            <text class="profile-page__modal-copy">选择每周默认需要值班的工作日。</text>
+            <view class="profile-page__weekday-wrap">
+              <button
+                wx:for="{{workdayOptionsForModal}}"
+                wx:key="value"
+                class="profile-page__weekday-chip {{item.active ? 'profile-page__weekday-chip--active' : ''}}"
+                data-value="{{item.value}}"
+                bindtap="handleToggleWorkday"
+              >
+                {{item.label}}
+              </button>
+            </view>
+          </view>
+          <view class="profile-page__modal-actions">
+            <button class="profile-page__modal-button profile-page__modal-button--ghost" bindtap="closeModal">取消</button>
+            <button class="profile-page__modal-button profile-page__modal-button--primary" bindtap="handleSaveWorkdays">保存</button>
+          </view>
+        </block>
+
+        <block wx:elif="{{modalType === 'shifts'}}">
+          <scroll-view class="profile-page__modal-scroll" scroll-y="true">
+            <view class="profile-page__modal-body">
+              <view wx:for="{{shiftEditors}}" wx:key="localId" class="profile-page__editor-card">
+                <view class="profile-page__editor-head">
+                  <text class="profile-page__editor-title">班次 {{index + 1}}</text>
+                  <button wx:if="{{shiftEditors.length > 1}}" class="profile-page__editor-link profile-page__editor-link--danger" data-index="{{index}}" bindtap="handleRemoveShift">删除</button>
+                </view>
+                <view class="profile-page__field">
+                  <text class="profile-page__field-label">班次名称</text>
+                  <input class="profile-page__input token-input" value="{{item.name}}" data-index="{{index}}" data-field="name" bindinput="handleShiftInput" placeholder="例如：上午班" />
+                </view>
+                <view class="profile-page__field-grid">
+                  <view class="profile-page__field">
+                    <text class="profile-page__field-label">开始时间</text>
+                    <input class="profile-page__input token-input" value="{{item.startTime}}" data-index="{{index}}" data-field="startTime" bindinput="handleShiftInput" placeholder="08:30" />
+                  </view>
+                  <view class="profile-page__field">
+                    <text class="profile-page__field-label">结束时间</text>
+                    <input class="profile-page__input token-input" value="{{item.endTime}}" data-index="{{index}}" data-field="endTime" bindinput="handleShiftInput" placeholder="13:00" />
+                  </view>
+                  <view class="profile-page__field">
+                    <text class="profile-page__field-label">默认人数</text>
+                    <input class="profile-page__input token-input" type="number" value="{{item.defaultRequiredCount}}" data-index="{{index}}" data-field="defaultRequiredCount" bindinput="handleShiftInput" />
+                  </view>
+                  <view class="profile-page__field">
+                    <text class="profile-page__field-label">最低人数</text>
+                    <input class="profile-page__input token-input" type="number" value="{{item.minCount}}" data-index="{{index}}" data-field="minCount" bindinput="handleShiftInput" />
+                  </view>
+                </view>
+                <view class="profile-page__switch-row">
+                  <text class="profile-page__field-label">允许单人班</text>
+                  <switch checked="{{item.allowSolo}}" data-index="{{index}}" bindchange="handleToggleShiftSolo" />
+                </view>
+              </view>
+
+              <button class="profile-page__secondary-button" bindtap="handleAddShift">新增班次</button>
+            </view>
+          </scroll-view>
+          <view class="profile-page__modal-actions">
+            <button class="profile-page__modal-button profile-page__modal-button--ghost" bindtap="closeModal">取消</button>
+            <button class="profile-page__modal-button profile-page__modal-button--primary" bindtap="handleSaveShifts">保存</button>
+          </view>
+        </block>
+
+        <block wx:elif="{{modalType === 'export'}}">
+          <view class="profile-page__modal-body">
+            <text class="profile-page__modal-copy">设置 Excel 导出的默认保存目录。请填写项目工作区内的相对路径，例如 server/exports。</text>
+            <view class="profile-page__field">
+              <text class="profile-page__field-label">导出位置</text>
+              <input
+                class="profile-page__input token-input"
+                value="{{exportDirectoryInput}}"
+                bindinput="handleExportDirectoryInput"
+                placeholder="server/exports"
+              />
+            </view>
+          </view>
+          <view class="profile-page__modal-actions">
+            <button class="profile-page__modal-button profile-page__modal-button--ghost" bindtap="closeModal">取消</button>
+            <button class="profile-page__modal-button profile-page__modal-button--primary" bindtap="handleSaveExportDirectory">保存</button>
+          </view>
+        </block>
+
+        <block wx:else>
+          <scroll-view class="profile-page__modal-scroll" scroll-y="true">
+            <view class="profile-page__modal-body">
+              <view wx:for="{{overrideEditors}}" wx:key="localId" class="profile-page__editor-card">
+                <view class="profile-page__editor-head">
+                  <text class="profile-page__editor-title">特殊日期 {{index + 1}}</text>
+                  <button class="profile-page__editor-link profile-page__editor-link--danger" data-index="{{index}}" bindtap="handleRemoveOverride">删除</button>
+                </view>
+                <view class="profile-page__field">
+                  <text class="profile-page__field-label">日期</text>
+                  <input class="profile-page__input token-input" value="{{item.workDate}}" data-index="{{index}}" data-field="workDate" bindinput="handleOverrideInput" placeholder="YYYY-MM-DD" />
+                </view>
+                <view class="profile-page__field">
+                  <text class="profile-page__field-label">类型</text>
+                  <view class="profile-page__weekday-wrap">
+                    <button class="profile-page__weekday-chip {{item.overrideType === 'workday' ? 'profile-page__weekday-chip--active' : ''}}" data-index="{{index}}" data-value="workday" bindtap="handleOverrideType">补班</button>
+                    <button class="profile-page__weekday-chip {{item.overrideType === 'non_workday' ? 'profile-page__weekday-chip--active' : ''}}" data-index="{{index}}" data-value="non_workday" bindtap="handleOverrideType">休息</button>
+                    <button class="profile-page__weekday-chip {{item.overrideType === 'no_shift' ? 'profile-page__weekday-chip--active' : ''}}" data-index="{{index}}" data-value="no_shift" bindtap="handleOverrideType">无需值班</button>
+                  </view>
+                </view>
+                <view class="profile-page__field">
+                  <text class="profile-page__field-label">备注</text>
+                  <input class="profile-page__input token-input" value="{{item.reason}}" data-index="{{index}}" data-field="reason" bindinput="handleOverrideInput" placeholder="可留空" />
+                </view>
+              </view>
+
+              <button class="profile-page__secondary-button" bindtap="handleAddOverride">新增特殊日期</button>
+            </view>
+          </scroll-view>
+          <view class="profile-page__modal-actions">
+            <button class="profile-page__modal-button profile-page__modal-button--ghost" bindtap="closeModal">取消</button>
+            <button class="profile-page__modal-button profile-page__modal-button--primary" bindtap="handleSaveOverrides">保存</button>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <bottom-nav items="{{navItems}}" activeKey="{{activeNavKey}}" bind:change="handleNavChange" />
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="profile-page__guard">
+      <state-view type="error" title="{{guardTitle}}" description="{{guardDescription}}" actionLabel="返回分流页" bind:action="handleReturnToEntry" />
+    </view>
+  </block>
+</view>

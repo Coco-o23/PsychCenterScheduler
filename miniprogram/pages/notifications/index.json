@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "app-top-bar": "/components/app-top-bar/index",
+    "state-view": "/components/state-view/index"
+  },
+  "navigationStyle": "custom"
+}

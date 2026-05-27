@@ -1,0 +1,117 @@
+<view class="component-page surface-page">
+  <app-top-bar
+    eyebrow="Component Lab"
+    title="基础组件验收"
+    subtitle="320 / 375 / 430 宽度下检查文字与布局"
+    action-label="筛选"
+    bindaction="openFilter"
+  />
+
+  <view class="component-content">
+    <view class="section">
+      <text class="section__title">状态标签</text>
+      <view class="chip-row">
+        <status-chip label="已发布" tone="info" />
+        <status-chip label="可值班" tone="success" />
+        <status-chip label="需关注" tone="warning" />
+        <status-chip label="冲突" tone="error" />
+        <status-chip label="未开始" tone="neutral" />
+      </view>
+    </view>
+
+    <view class="section">
+      <text class="section__title">时间格子</text>
+      <view class="slot-grid">
+        <time-slot title="08:30-13:00" subtitle="有空" state="available" />
+        <time-slot title="13:00-17:30" subtitle="已选择" state="selected" />
+        <time-slot title="08:30-13:00" subtitle="人数不足" state="warning" />
+        <time-slot title="13:00-17:30" subtitle="不可排" state="neutral" disabled="{{true}}" />
+      </view>
+    </view>
+
+    <view class="section">
+      <text class="section__title">班次卡片</text>
+      <shift-card
+        time="08:30-13:00"
+        title="中心前台值班"
+        people="{{shiftPeopleA}}"
+        location="咨询中心 301"
+        status-label="已发布"
+        status-tone="info"
+      />
+      <shift-card
+        time="13:00-17:30"
+        title="热线与接待"
+        people="{{shiftPeopleB}}"
+        location="咨询中心 302"
+        status-label="草稿"
+        status-tone="warning"
+        risk-label="单人班"
+      />
+    </view>
+
+    <view class="section">
+      <text class="section__title">成员卡片</text>
+      <member-card
+        avatar-text="林"
+        name="林夏"
+        student-id="A0001"
+        college="心理学院"
+        gender="女"
+        grade="2023级"
+        shift-count="{{4}}"
+      />
+      <member-card
+        avatar-text="陈"
+        name="陈晨"
+        student-id="19318109"
+        college="教育学院"
+        gender="女"
+        grade="2022级"
+        shift-count="{{6}}"
+        role-label="管理员"
+        editable="{{true}}"
+      />
+    </view>
+
+    <view class="section">
+      <text class="section__title">状态反馈</text>
+      <state-view title="暂无排班" description="当前日期没有已发布班次。" type="empty" action-label="返回今日" />
+      <state-view title="正在加载" description="正在同步本地后端数据。" type="loading" />
+      <state-view title="加载失败" description="请检查网络或稍后重试。" type="error" action-label="重试" />
+    </view>
+
+    <view class="section">
+      <text class="section__title">弹窗与主操作</text>
+      <button class="demo-button" bindtap="openDialog">打开确认弹窗</button>
+    </view>
+  </view>
+
+  <view class="floating-action">
+    <primary-action-bar label="提交填报" secondary-label="保存草稿" />
+  </view>
+
+  <view class="nav-preview">
+    <bottom-nav items="{{assistantNav}}" active-key="schedule" />
+  </view>
+
+  <confirm-dialog
+    visible="{{isDialogVisible}}"
+    title="确认发布排班"
+    message="发布后所有相关助理都可以在日程页看到本次排班。"
+    cancel-label="再检查"
+    confirm-label="确认发布"
+    tone="primary"
+    bindcancel="closeDialog"
+    bindconfirm="closeDialog"
+  />
+
+  <filter-panel
+    visible="{{isFilterVisible}}"
+    title="筛选成员"
+    groups="{{filterGroups}}"
+    bindclose="closeFilter"
+    bindreset="closeFilter"
+    bindapply="closeFilter"
+  />
+</view>

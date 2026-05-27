@@ -1,0 +1,297 @@
+<view class="collection-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar
+      eyebrow="排班结果"
+      title="{{title}}"
+      subtitle="{{userName}}"
+      showBack="{{true}}"
+      actionLabel="刷新"
+      bind:back="handleBack"
+      bind:action="handleRefresh"
+    />
+
+    <view class="collection-page__content">
+      <view class="surface-card collection-page__hero collection-page__hero--compact">
+        <text class="collection-page__hero-title">{{title}}</text>
+        <text class="collection-page__hero-copy collection-page__hero-copy--tight">{{weekLabel}}</text>
+      </view>
+
+      <block wx:if="{{requestState === 'loading'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">加载中</text>
+          <text class="collection-page__empty-copy">正在读取排班方案、规则和草稿状态。</text>
+        </view>
+      </block>
+
+      <block wx:elif="{{requestState === 'error'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">排班页加载失败</text>
+          <text class="collection-page__empty-copy">请确认收集任务存在，且后端服务和数据库正在运行。</text>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view class="surface-card collection-page__summary-card">
+          <view class="collection-page__summary-header">
+            <view class="collection-page__summary-main">
+              <text class="collection-page__summary-title">排班草稿状态</text>
+              <text class="collection-page__summary-subtitle">
+                已填报 {{submittedUsers}} / {{totalUsers}} 人
+              </text>
+            </view>
+            <view class="collection-page__status-chip collection-page__status-chip--{{scheduleStatusClassName}}">
+              {{scheduleStatusLabel}}
+            </view>
+          </view>
+
+          <view class="collection-page__count-grid">
+            <view class="collection-page__count-item">
+              <text class="collection-page__count-label">已覆盖班次</text>
+              <text class="collection-page__count-value">{{assignedSlots}} / {{totalSlots}}</text>
+            </view>
+            <view class="collection-page__count-item">
+              <text class="collection-page__count-label">当前排班总人数</text>
+              <text class="collection-page__count-value">{{totalAssignments}}</text>
+            </view>
+          </view>
+
+          <view class="collection-page__button-row">
+            <button
+              wx:if="{{canGenerate}}"
+              class="collection-page__primary-button"
+              hover-class="button-reset-hover"
+              bindtap="handleGenerateDraft"
+            >
+              {{generateButtonLabel}}
+            </button>
+            <button
+              wx:if="{{canPublish}}"
+              class="collection-page__secondary-button"
+              hover-class="button-reset-hover"
+              bindtap="handlePublishSchedule"
+            >
+              {{publishButtonLabel}}
+            </button>
+            <button
+              class="collection-page__ghost-button"
+              hover-class="button-reset-hover"
+              bindtap="handleExportSchedule"
+            >
+              导出 Excel
+            </button>
+            <button
+              wx:if="{{canShare}}"
+              class="collection-page__ghost-button"
+              hover-class="button-reset-hover"
+              open-type="share"
+            >
+              微信分享
+            </button>
+          </view>
+        </view>
+
+        <view class="surface-card collection-page__summary-card">
+          <view class="collection-page__submitted-section-header">
+            <text class="collection-page__section-title">排班偏好规则</text>
+            <button
+              class="collection-page__secondary-button collection-page__inline-button"
+              hover-class="button-reset-hover"
+              bindtap="handleSaveRules"
+            >
+              {{isRuleDirty ? '保存规则' : '规则已同步'}}
+            </button>
+          </view>
+
+          <view class="collection-page__fill-options">
+            <view
+              wx:for="{{ruleItems}}"
+              wx:key="key"
+              class="collection-page__toggle-row collection-page__toggle-row--divider"
+            >
+              <view class="collection-page__toggle-main">
+                <text class="collection-page__toggle-title">{{item.title}}</text>
+                <text class="collection-page__toggle-desc">{{item.description}}</text>
+              </view>
+              <view
+                class="collection-page__switch {{item.active ? 'collection-page__switch--active' : ''}}"
+                data-key="{{item.key}}"
+                bindtap="handleToggleRule"
+              >
+                <view class="collection-page__switch-thumb"></view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="surface-card collection-page__summary-card">
+          <text class="collection-page__section-title">可选排班方案</text>
+          <view class="collection-page__submitted-list">
+            <view
+              wx:for="{{strategyCards}}"
+              wx:key="strategyKey"
+              class="collection-page__submitted-item"
+              data-strategy-key="{{item.strategyKey}}"
+              bindtap="handleSelectStrategy"
+            >
+              <view>
+                <text class="collection-page__submitted-name">
+                  {{item.strategyName}}{{item.recommended ? ' · 推荐' : ''}}
+                </text>
+                <text class="collection-page__submitted-meta">
+                  满员 {{item.fullStaffedSlots}} · 覆盖 {{item.coveredSlots}} · 无人 {{item.emptySlots}} · 单人 {{item.singlePersonSlots}} · 风险 {{item.riskCount}}
+                </text>
+              </view>
+              <text class="collection-page__count-text">{{item.active ? '查看中' : item.score}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{collectionStatus !== 'completed'}}" class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">当前收集尚未完成</text>
+          <text class="collection-page__empty-copy">请先等待空闲时间收集完成，再生成排班方案。</text>
+        </view>
+
+        <block wx:elif="{{strategyCards.length === 0}}">
+          <view class="surface-card collection-page__empty-card">
+            <text class="collection-page__section-title">还没有排班方案</text>
+            <text class="collection-page__empty-copy">点击上方按钮生成 3 个可选方案，再进入人工调整。</text>
+          </view>
+        </block>
+
+        <block wx:else>
+          <view wx:for="{{dayGroups}}" wx:key="key" class="collection-page__detail-day">
+            <text class="collection-page__section-title">{{item.dateLabel}}</text>
+
+            <view
+              wx:for="{{item.slots}}"
+              wx:key="key"
+              wx:for-item="slotItem"
+              class="surface-card collection-page__detail-card"
+            >
+              <view class="collection-page__detail-header">
+                <view class="collection-page__summary-main">
+                  <text class="collection-page__detail-title">{{slotItem.shiftLabel}}</text>
+                  <text class="collection-page__detail-subtitle">{{slotItem.startTime}} - {{slotItem.endTime}}</text>
+                </view>
+                <view class="collection-page__detail-actions">
+                  <view
+                    wx:if="{{slotItem.riskLevel !== 'none'}}"
+                    class="collection-page__risk-chip collection-page__risk-chip--{{slotItem.riskLevel}}"
+                  >
+                    {{slotItem.riskLabel}}
+                  </view>
+                  <button
+                    wx:if="{{scheduleStatus !== 'published'}}"
+                    class="collection-page__secondary-button collection-page__inline-button"
+                    hover-class="button-reset-hover"
+                    data-work-date="{{slotItem.workDate}}"
+                    data-shift-template-id="{{slotItem.shiftTemplateId}}"
+                    data-label="{{slotItem.dateLabel}} {{slotItem.shiftLabel}}"
+                    bindtap="handleOpenAddModal"
+                  >
+                    添加成员
+                  </button>
+                </view>
+              </view>
+
+              <view class="collection-page__detail-meta">
+                <text class="collection-page__helper-text">{{slotItem.countText}}</text>
+              </view>
+
+              <view wx:if="{{slotItem.riskTagLabels.length > 0}}" class="collection-page__submitted-list">
+                <view wx:for="{{slotItem.riskTagLabels}}" wx:key="*this" class="collection-page__submitted-item">
+                  <text class="collection-page__submitted-meta">{{item}}</text>
+                </view>
+              </view>
+
+              <view wx:if="{{slotItem.assignedMembers.length > 0}}" class="collection-page__member-list">
+                <view
+                  wx:for="{{slotItem.assignedMembers}}"
+                  wx:key="userId"
+                  wx:for-item="memberItem"
+                  class="collection-page__member-chip {{memberItem.assignmentSource === 'manual' ? 'collection-page__member-chip--manual' : ''}}"
+                >
+                  <view class="collection-page__member-text">
+                    {{memberItem.name}} · {{memberItem.studentId}}
+                  </view>
+                  <button
+                    wx:if="{{scheduleStatus !== 'published'}}"
+                    class="collection-page__remove-button"
+                    hover-class="button-reset-hover"
+                    data-work-date="{{slotItem.workDate}}"
+                    data-shift-template-id="{{slotItem.shiftTemplateId}}"
+                    data-user-id="{{memberItem.userId}}"
+                    data-member-name="{{memberItem.name}}"
+                    bindtap="handleRemoveMember"
+                  >
+                    移
+                  </button>
+                </view>
+              </view>
+
+              <view wx:else class="collection-page__empty-card collection-page__empty-card--compact">
+                <text class="collection-page__empty-copy">当前班次还没有排班成员。</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </block>
+    </view>
+
+    <bottom-nav
+      items="{{navItems}}"
+      activeKey="{{activeNavKey}}"
+      bind:change="handleNavChange"
+    />
+
+    <view wx:if="{{isModalVisible}}" class="collection-page__modal-mask" catchtap="handleCloseModal">
+      <view class="collection-page__modal" catchtap="noop">
+        <text class="collection-page__modal-title">{{modalTitle}}</text>
+        <text class="collection-page__modal-subtitle">{{modalSubtitle}}</text>
+
+        <view wx:if="{{modalCandidates.length > 0}}" class="collection-page__modal-list">
+          <view wx:for="{{modalCandidates}}" wx:key="userId" class="collection-page__candidate-item">
+            <view class="collection-page__candidate-main">
+              <text class="collection-page__candidate-name">{{item.name}}</text>
+              <text class="collection-page__candidate-meta">{{item.summaryText}}</text>
+            </view>
+            <button
+              class="collection-page__primary-button collection-page__candidate-add"
+              hover-class="button-reset-hover"
+              data-user-id="{{item.userId}}"
+              bindtap="handleAddCandidate"
+            >
+              加入
+            </button>
+          </view>
+        </view>
+
+        <view wx:else class="collection-page__empty-card collection-page__empty-card--compact">
+          <text class="collection-page__empty-copy">当前没有可加入的新成员。</text>
+        </view>
+
+        <view class="collection-page__modal-footer">
+          <button
+            class="collection-page__secondary-button"
+            hover-class="button-reset-hover"
+            bindtap="handleCloseModal"
+          >
+            关闭
+          </button>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="collection-page__content">
+      <state-view
+        type="error"
+        title="{{guardTitle}}"
+        description="{{guardDescription}}"
+        actionLabel="Back"
+        bind:action="handleReturnToEntry"
+      />
+    </view>
+  </block>
+</view>

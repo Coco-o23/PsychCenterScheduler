@@ -1,0 +1,105 @@
+<view class="collection-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar
+      eyebrow="排班分享"
+      title="{{title}}"
+      subtitle="{{viewerName}}"
+      showBack="{{true}}"
+      actionLabel="刷新"
+      bind:back="handleBack"
+      bind:action="handleRefresh"
+    />
+
+    <view class="collection-page__content">
+      <view class="surface-card collection-page__hero collection-page__hero--compact">
+        <text class="collection-page__hero-title">{{title}}</text>
+        <text class="collection-page__hero-copy collection-page__hero-copy--tight">{{weekLabel}}</text>
+      </view>
+
+      <block wx:if="{{requestState === 'loading'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">正在读取分享内容</text>
+          <text class="collection-page__empty-copy">我们正在同步本周已发布排班，请稍等一下。</text>
+        </view>
+      </block>
+
+      <block wx:elif="{{requestState === 'error'}}">
+        <view class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">分享页加载失败</text>
+          <text class="collection-page__empty-copy">请确认当前排班已经发布，并且你已选择可访问的测试身份。</text>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view class="surface-card collection-page__summary-card">
+          <view class="collection-page__summary-header">
+            <view class="collection-page__summary-main">
+              <text class="collection-page__summary-title">{{scopeLabel}}</text>
+              <text class="collection-page__summary-subtitle">{{scopeDescription}}</text>
+            </view>
+            <view class="collection-page__status-chip collection-page__status-chip--completed">
+              已发布
+            </view>
+          </view>
+
+          <view class="collection-page__detail-meta">
+            <text class="collection-page__helper-text">发布时间：{{confirmedAt}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{dayGroups.length === 0}}" class="surface-card collection-page__empty-card">
+          <text class="collection-page__section-title">当前没有可展示的班次</text>
+          <text class="collection-page__empty-copy">{{emptyStateMessage}}</text>
+        </view>
+
+        <block wx:else>
+          <view wx:for="{{dayGroups}}" wx:key="key" class="collection-page__detail-day">
+            <text class="collection-page__section-title">{{item.dateLabel}}</text>
+
+            <view
+              wx:for="{{item.slots}}"
+              wx:key="key"
+              wx:for-item="slotItem"
+              class="surface-card collection-page__detail-card"
+            >
+              <view class="collection-page__detail-header">
+                <view class="collection-page__summary-main">
+                  <text class="collection-page__detail-title">{{slotItem.shiftLabel}}</text>
+                  <text class="collection-page__detail-subtitle">{{slotItem.timeLabel}}</text>
+                </view>
+              </view>
+
+              <view class="collection-page__member-list">
+                <view
+                  wx:for="{{slotItem.assignedMembers}}"
+                  wx:key="userId"
+                  wx:for-item="memberItem"
+                  class="collection-page__member-chip {{memberItem.isSelf ? 'collection-page__member-chip--manual' : ''}}"
+                >
+                  <view class="collection-page__member-stack">
+                    <text class="collection-page__member-name">
+                      {{memberItem.label}}{{memberItem.isSelf ? ' · 我' : ''}}
+                    </text>
+                    <text class="collection-page__member-meta">{{memberItem.meta}}</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+      </block>
+    </view>
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="collection-page__content">
+      <state-view
+        type="error"
+        title="{{guardTitle}}"
+        description="{{guardDescription}}"
+        actionLabel="返回"
+        bind:action="handleReturnToEntry"
+      />
+    </view>
+  </block>
+</view>

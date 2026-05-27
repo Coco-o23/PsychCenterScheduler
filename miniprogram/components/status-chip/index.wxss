@@ -1,0 +1,38 @@
+@import "../../styles/tokens.wxss";
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 40rpx;
+  padding: 4rpx 18rpx;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-label-md);
+  font-weight: 700;
+  line-height: var(--line-height-label-md);
+}
+
+.chip--info {
+  background: #d8e2ff;
+  color: #004493;
+}
+
+.chip--success {
+  background: #dcfce3;
+  color: var(--color-secondary);
+}
+
+.chip--warning {
+  background: var(--color-tertiary-container);
+  color: var(--color-tertiary);
+}
+
+.chip--error {
+  background: var(--color-error-container);
+  color: var(--color-on-error-container);
+}
+
+.chip--neutral {
+  background: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+}

@@ -1,7 +1,23 @@
 {
   "pages": [
-    "pages/test-entry/index"
+    "pages/test-entry/index",
+    "pages/admin-main/index",
+    "pages/admin-duty/index",
+    "pages/admin-collection-detail/index",
+    "pages/admin-schedule/index",
+    "pages/schedule-share/index",
+    "pages/assistant-main/index",
+    "pages/assistant-duty/index",
+    "pages/admin-team/index",
+    "pages/assistant-team/index",
+    "pages/admin-profile/index",
+    "pages/assistant-profile/index",
+    "pages/notifications/index",
+    "pages/style-lab/index",
+    "pages/component-lab/index",
+    "pages/request-lab/index"
   ],
+  "subPackages": [],
   "window": {
     "backgroundColor": "#F6F7FB",
     "backgroundTextStyle": "light",

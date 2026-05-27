@@ -1,0 +1,149 @@
+<view class="profile-page surface-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar title="个人中心" subtitle="{{roleLabel}}" />
+
+    <view class="profile-page__content">
+      <view class="profile-page__profile-card">
+        <view class="profile-page__profile-accent"></view>
+        <view class="profile-page__profile-avatar">{{avatarText}}</view>
+        <view class="profile-page__profile-main">
+          <text class="profile-page__profile-name">{{userName}}</text>
+          <text class="profile-page__profile-line">学号：{{studentId}}</text>
+          <text class="profile-page__profile-line">学院：{{college}}</text>
+          <text class="profile-page__profile-line">年级：{{grade}}</text>
+        </view>
+      </view>
+
+      <view class="profile-page__section-head">
+        <text class="profile-page__section-title">默认空闲时间</text>
+        <button class="profile-page__link-button" data-type="availability" bindtap="openModal">
+          更新设置
+        </button>
+      </view>
+
+      <view class="profile-page__grid-card">
+        <view class="profile-page__grid-head">
+          <text
+            wx:for="{{availabilityHeadDays}}"
+            wx:key="value"
+            class="profile-page__grid-head-cell"
+          >
+            {{item.shortLabel}}
+          </text>
+        </view>
+        <view
+          wx:for="{{availabilityRows}}"
+          wx:key="label"
+          wx:for-item="row"
+          class="profile-page__grid-row"
+        >
+          <view
+            wx:for="{{row.cells}}"
+            wx:key="weekday"
+            wx:for-item="cell"
+            class="profile-page__grid-cell {{cell.active ? 'profile-page__grid-cell--active' : ''}}"
+          >
+            <view wx:if="{{cell.active}}" class="profile-page__grid-dot"></view>
+          </view>
+        </view>
+      </view>
+
+      <view class="profile-page__section-label">提醒与会话</view>
+      <view class="profile-page__settings-card">
+        <button class="profile-page__setting-row" bindtap="handleNotificationEntry">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">站内通知</text>
+            <text class="profile-page__setting-summary">{{notificationSummary}}</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+
+        <button class="profile-page__setting-row" bindtap="handleLogout">
+          <view class="profile-page__setting-main">
+            <text class="profile-page__setting-title">退出测试身份</text>
+            <text class="profile-page__setting-summary">返回分流页，重新选择角色进入</text>
+          </view>
+          <text class="profile-page__setting-arrow">›</text>
+        </button>
+      </view>
+    </view>
+
+    <view
+      wx:if="{{modalType === 'availability'}}"
+      class="profile-page__modal-mask"
+      bindtap="closeModal"
+    >
+      <view class="profile-page__modal" catchtap="noop">
+        <view class="profile-page__modal-head">
+          <text class="profile-page__modal-title">默认空闲时间</text>
+          <button class="profile-page__modal-close" bindtap="closeModal">×</button>
+        </view>
+
+        <view class="profile-page__modal-body">
+          <text class="profile-page__modal-copy">
+            请选择默认有空的班次格子。绿色表示默认有空，白色表示默认不排。
+          </text>
+          <view class="profile-page__availability-editor">
+            <view class="profile-page__availability-head">
+              <view class="profile-page__availability-label-cell"></view>
+              <text
+                wx:for="{{availabilityHeadDays}}"
+                wx:key="value"
+                class="profile-page__availability-head-cell"
+              >
+                {{item.shortLabel}}
+              </text>
+            </view>
+            <view
+              wx:for="{{availabilityRows}}"
+              wx:key="label"
+              wx:for-item="row"
+              class="profile-page__availability-row"
+            >
+              <view class="profile-page__availability-label-cell">{{row.label}}</view>
+              <button
+                wx:for="{{row.cells}}"
+                wx:key="weekday"
+                wx:for-item="cell"
+                class="profile-page__availability-cell {{cell.active ? 'profile-page__availability-cell--active' : ''}}"
+                data-shift-index="{{row.shiftIndex}}"
+                data-weekday="{{cell.weekday}}"
+                bindtap="handleToggleAvailabilityCell"
+              >
+                <view wx:if="{{cell.active}}" class="profile-page__availability-dot"></view>
+              </button>
+            </view>
+          </view>
+        </view>
+        <view class="profile-page__modal-actions">
+          <button
+            class="profile-page__modal-button profile-page__modal-button--ghost"
+            bindtap="closeModal"
+          >
+            取消
+          </button>
+          <button
+            class="profile-page__modal-button profile-page__modal-button--primary"
+            bindtap="handleSaveAvailability"
+          >
+            保存设置
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <bottom-nav items="{{navItems}}" activeKey="{{activeNavKey}}" bind:change="handleNavChange" />
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="profile-page__guard">
+      <state-view
+        type="error"
+        title="{{guardTitle}}"
+        description="{{guardDescription}}"
+        actionLabel="返回分流页"
+        bind:action="handleReturnToEntry"
+      />
+    </view>
+  </block>
+</view>

@@ -1,0 +1,95 @@
+@import "../../styles/tokens.wxss";
+
+.member-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 2rpx solid rgba(193, 198, 214, 0.56);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-card);
+}
+
+.member-card__avatar {
+  display: flex;
+  width: 88rpx;
+  height: 88rpx;
+  flex: 0 0 88rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: #d8e2ff;
+  color: var(--color-primary);
+  font-size: var(--font-size-body-lg);
+  font-weight: 800;
+}
+
+.member-card__main {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.member-card__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.member-card__name,
+.member-card__meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-card__name {
+  color: var(--color-on-surface);
+  font-size: var(--font-size-body-lg);
+  font-weight: 700;
+  line-height: var(--line-height-body-lg);
+}
+
+.member-card__meta {
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-label-md);
+  line-height: var(--line-height-label-md);
+}
+
+.member-card__side {
+  display: flex;
+  width: 96rpx;
+  align-items: center;
+  flex-direction: column;
+}
+
+.member-card__count {
+  color: var(--color-on-surface);
+  font-size: var(--font-size-headline-md);
+  font-weight: 800;
+  line-height: var(--line-height-headline-md);
+}
+
+.member-card__count-label {
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.member-card__edit {
+  min-height: 48rpx;
+  margin: 6rpx 0 0;
+  padding: 0 14rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-low);
+  color: var(--color-primary);
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
+.member-card__edit::after {
+  border: 0;
+}

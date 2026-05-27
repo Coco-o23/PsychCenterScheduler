@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "\u7ec4\u4ef6\u9a8c\u6536",
+  "usingComponents": {
+    "app-top-bar": "../../components/app-top-bar/index",
+    "bottom-nav": "../../components/bottom-nav/index",
+    "confirm-dialog": "../../components/confirm-dialog/index",
+    "filter-panel": "../../components/filter-panel/index",
+    "member-card": "../../components/member-card/index",
+    "primary-action-bar": "../../components/primary-action-bar/index",
+    "shift-card": "../../components/shift-card/index",
+    "state-view": "../../components/state-view/index",
+    "status-chip": "../../components/status-chip/index",
+    "time-slot": "../../components/time-slot/index"
+  }
+}

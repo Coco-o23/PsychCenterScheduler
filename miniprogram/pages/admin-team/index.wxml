@@ -1,0 +1,400 @@
+<view class="admin-team team-page">
+  <block wx:if="{{guardState === 'ready'}}">
+    <app-top-bar
+      eyebrow="团队管理"
+      title="团队"
+      subtitle="{{userName}}"
+    />
+
+    <view class="team-page__content">
+      <view class="team-page__hero">
+        <text class="team-page__hero-eyebrow">中心管理</text>
+        <text class="team-page__hero-title">团队概览</text>
+        <view class="team-page__hero-row">
+          <view class="team-page__hero-count">
+            <text class="team-page__hero-count-value">{{summary.totalMembers}}</text>
+            <text class="team-page__hero-count-label">助理总数</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="team-page__search-row">
+        <view class="team-page__search">
+          <view class="team-page__search-icon"></view>
+          <input
+            class="team-page__search-input"
+            placeholder="搜索助理..."
+            value="{{keywordDraft}}"
+            bindinput="handleKeywordInput"
+          />
+        </view>
+
+        <button class="team-page__filter-toggle" bindtap="handleToggleFilterPanel">
+          <view class="team-page__filter-toggle-lines">
+            <text></text>
+          </view>
+        </button>
+      </view>
+
+      <view wx:if="{{filterPanelVisible}}" class="team-page__filters">
+        <view class="team-page__filter-group">
+          <text class="team-page__filter-label">角色</text>
+          <view class="team-page__chip-row">
+            <button
+              wx:for="{{roleFilterOptions}}"
+              wx:key="value"
+              class="team-page__chip {{filters.role === item.value ? 'team-page__chip--active' : ''}}"
+              data-field="role"
+              data-value="{{item.value}}"
+              bindtap="handleFilterSelect"
+            >
+              {{item.label}}
+            </button>
+          </view>
+        </view>
+
+        <view class="team-page__filter-group">
+          <text class="team-page__filter-label">账号状态</text>
+          <view class="team-page__chip-row">
+            <button
+              wx:for="{{statusFilterOptions}}"
+              wx:key="value"
+              class="team-page__chip {{filters.accountStatus === item.value ? 'team-page__chip--active' : ''}}"
+              data-field="accountStatus"
+              data-value="{{item.value}}"
+              bindtap="handleFilterSelect"
+            >
+              {{item.label}}
+            </button>
+          </view>
+        </view>
+
+        <view class="team-page__filter-group">
+          <text class="team-page__filter-label">成员类型</text>
+          <view class="team-page__chip-row">
+            <button
+              wx:for="{{memberTypeFilterOptions}}"
+              wx:key="value"
+              class="team-page__chip {{filters.memberType === item.value ? 'team-page__chip--active' : ''}}"
+              data-field="memberType"
+              data-value="{{item.value}}"
+              bindtap="handleFilterSelect"
+            >
+              {{item.label}}
+            </button>
+          </view>
+        </view>
+      </view>
+
+      <state-view
+        wx:if="{{requestState === 'loading'}}"
+        type="loading"
+        title="正在载入团队成员"
+        description="稍等一下，我们把当前管理视角的数据准备好。"
+      />
+
+      <state-view
+        wx:elif="{{requestState === 'error'}}"
+        type="error"
+        title="团队成员加载失败"
+        description="请检查后端服务、数据库连接和当前测试身份。"
+        actionLabel="重新加载"
+        bind:action="handleRetry"
+      />
+
+      <state-view
+        wx:elif="{{requestState === 'empty'}}"
+        type="empty"
+        title="还没有团队成员"
+        description="可以先通过右下角的管理按钮新增成员。"
+      />
+
+      <block wx:elif="{{members.length}}">
+        <view class="team-page__list">
+          <view
+            wx:for="{{members}}"
+            wx:key="userId"
+            class="team-page__member {{item.accentTone === 'secondary' ? 'team-page__member--secondary' : ''}}"
+          >
+            <button
+              class="team-page__member-button"
+              data-user-id="{{item.userId}}"
+              bindtap="handleToggleMember"
+            >
+              <view class="team-page__member-leading">
+                <view class="team-page__avatar">
+                  <image
+                    wx:if="{{item.avatarUrl}}"
+                    class="team-page__avatar-image"
+                    src="{{item.avatarUrl}}"
+                    mode="aspectFill"
+                  />
+                  <text wx:else>{{item.avatarText}}</text>
+                </view>
+
+                <view class="team-page__member-main">
+                  <text class="team-page__member-name">{{item.name}}</text>
+                  <text class="team-page__member-line">学号：{{item.studentId}}</text>
+                  <text class="team-page__member-line">学院：{{item.college}}</text>
+                </view>
+              </view>
+
+              <view class="team-page__member-side">
+                <text class="team-page__member-side-value">{{item.monthlyShiftCount}} 个班次</text>
+              </view>
+              <text class="team-page__member-expand">{{item.expanded ? '收起' : '展开'}}</text>
+            </button>
+
+            <button
+              wx:if="{{memberManageMode}}"
+              class="team-page__member-edit"
+              data-user-id="{{item.userId}}"
+              catchtap="handleEditMember"
+            >
+              <text class="team-page__member-edit-icon">编辑</text>
+            </button>
+
+            <view wx:if="{{item.expanded}}" class="team-page__member-details">
+              <view class="team-page__detail-grid">
+                <view class="team-page__detail-item">
+                  <text class="team-page__detail-key">性别</text>
+                  <text class="team-page__detail-value">{{item.genderLabel}}</text>
+                </view>
+                <view class="team-page__detail-item">
+                  <text class="team-page__detail-key">年级</text>
+                  <text class="team-page__detail-value">{{item.grade}}</text>
+                </view>
+                <view class="team-page__detail-item">
+                  <text class="team-page__detail-key">角色</text>
+                  <text class="team-page__detail-value">{{item.roleLabel}}</text>
+                </view>
+                <view class="team-page__detail-item">
+                  <text class="team-page__detail-key">成员类型</text>
+                  <text class="team-page__detail-value">{{item.memberTypeLabel}}</text>
+                </view>
+                <view class="team-page__detail-item">
+                  <text class="team-page__detail-key">账号状态</text>
+                  <text class="team-page__detail-value">{{item.accountStatusLabel}}</text>
+                </view>
+                <view class="team-page__detail-item">
+                  <text class="team-page__detail-key">微信绑定</text>
+                  <text class="team-page__detail-value">{{item.bindingLabel}}</text>
+                </view>
+                <view class="team-page__detail-item">
+                  <text class="team-page__detail-key">单独值班</text>
+                  <text class="team-page__detail-value">{{item.canSoloShift ? '允许' : '不允许'}}</text>
+                </view>
+                <view class="team-page__detail-item">
+                  <text class="team-page__detail-key">可靠标签</text>
+                  <text class="team-page__detail-value">{{item.reliabilityTag ? '已标记' : '未标记'}}</text>
+                </view>
+              </view>
+
+              <view class="team-page__detail-tags">
+                <text class="team-page__tag">{{item.memberTypeLabel}}</text>
+                <text class="team-page__tag team-page__tag--success">{{item.accountStatusLabel}}</text>
+                <text class="team-page__tag {{item.openidBound ? 'team-page__tag--success' : 'team-page__tag--neutral'}}">{{item.bindingLabel}}</text>
+              </view>
+
+              <view wx:if="{{item.testIdentityKey}}" class="team-page__detail-item">
+                <text class="team-page__detail-key">测试身份 key</text>
+                <text class="team-page__detail-value">{{item.testIdentityKey}}</text>
+              </view>
+
+              <view wx:if="{{memberManageMode}}" class="team-page__member-actions">
+                <button
+                  class="team-page__member-action team-page__member-action--secondary"
+                  data-user-id="{{item.userId}}"
+                  catchtap="handleEditMember"
+                >
+                  编辑
+                </button>
+                <button
+                  class="team-page__member-action team-page__member-action--danger"
+                  data-user-id="{{item.userId}}"
+                  catchtap="handleRequestDelete"
+                >
+                  删除
+                </button>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <view wx:else class="team-page__empty-inline">
+        当前筛选条件下没有找到成员。
+      </view>
+    </view>
+
+    <view wx:if="{{memberManageMode}}" class="team-page__floating-stack">
+      <button class="team-page__floating team-page__floating--active team-page__floating--left" catchtap="handlePrimaryManageAction">
+        <text class="team-page__floating-icon">+</text>
+      </button>
+      <button class="team-page__floating team-page__floating--confirm team-page__floating--right" catchtap="handleToggleManageMode">
+        <text class="team-page__floating-icon">√</text>
+      </button>
+    </view>
+
+    <button wx:else class="team-page__floating" bindtap="handlePrimaryManageAction">
+      <view class="team-page__wrench-icon"></view>
+    </button>
+
+    <view wx:if="{{editorVisible}}" class="team-page__modal-mask">
+      <view class="team-page__modal">
+        <view class="team-page__modal-head">
+          <text class="team-page__modal-title">{{editorMode === 'create' ? '新增成员' : '编辑成员'}}</text>
+          <button class="team-page__modal-close" bindtap="handleCloseEditor">×</button>
+        </view>
+
+        <scroll-view class="team-page__modal-scroll" scroll-y="true">
+          <view class="team-page__modal-scroll-inner">
+          <view class="team-page__form">
+            <view class="team-page__field">
+              <text class="team-page__field-label">姓名</text>
+              <input class="team-page__input token-input" placeholder="请输入姓名" value="{{form.name}}" data-field="name" bindinput="handleFieldInput" />
+            </view>
+
+            <view class="team-page__field">
+              <text class="team-page__field-label">学号</text>
+              <input class="team-page__input token-input" placeholder="请输入学号" value="{{form.studentId}}" data-field="studentId" bindinput="handleFieldInput" />
+            </view>
+
+            <view class="team-page__field">
+              <text class="team-page__field-label">学院</text>
+              <input class="team-page__input token-input" placeholder="请输入学院" value="{{form.college}}" data-field="college" bindinput="handleFieldInput" />
+            </view>
+
+            <view class="team-page__field">
+              <text class="team-page__field-label">年级</text>
+              <input class="team-page__input token-input" placeholder="请输入年级" value="{{form.grade}}" data-field="grade" bindinput="handleFieldInput" />
+            </view>
+
+            <view class="team-page__field">
+              <text class="team-page__field-label">测试身份 key</text>
+              <input class="team-page__input token-input" placeholder="可留空" value="{{form.testIdentityKey || ''}}" data-field="testIdentityKey" bindinput="handleFieldInput" />
+            </view>
+
+            <view class="team-page__field">
+              <text class="team-page__field-label">性别</text>
+              <view class="team-page__chip-row">
+                <button
+                  wx:for="{{genderOptions}}"
+                  wx:key="value"
+                  class="team-page__chip {{form.gender === item.value ? 'team-page__chip--active' : ''}}"
+                  data-field="gender"
+                  data-value="{{item.value}}"
+                  bindtap="handleOptionSelect"
+                >
+                  {{item.label}}
+                </button>
+              </view>
+            </view>
+
+            <view class="team-page__field">
+              <text class="team-page__field-label">成员类型</text>
+              <view class="team-page__chip-row">
+                <button
+                  wx:for="{{memberTypeOptions}}"
+                  wx:key="value"
+                  class="team-page__chip {{form.memberType === item.value ? 'team-page__chip--active' : ''}}"
+                  data-field="memberType"
+                  data-value="{{item.value}}"
+                  bindtap="handleOptionSelect"
+                >
+                  {{item.label}}
+                </button>
+              </view>
+            </view>
+
+            <view class="team-page__field">
+              <text class="team-page__field-label">角色</text>
+              <view class="team-page__chip-row">
+                <button
+                  wx:for="{{roleOptions}}"
+                  wx:key="value"
+                  class="team-page__chip {{form.role === item.value ? 'team-page__chip--active' : ''}}"
+                  data-field="role"
+                  data-value="{{item.value}}"
+                  bindtap="handleOptionSelect"
+                >
+                  {{item.label}}
+                </button>
+              </view>
+            </view>
+
+            <view class="team-page__field">
+              <text class="team-page__field-label">账号状态</text>
+              <view class="team-page__chip-row">
+                <button
+                  wx:for="{{statusOptions}}"
+                  wx:key="value"
+                  class="team-page__chip {{form.accountStatus === item.value ? 'team-page__chip--active' : ''}}"
+                  data-field="accountStatus"
+                  data-value="{{item.value}}"
+                  bindtap="handleOptionSelect"
+                >
+                  {{item.label}}
+                </button>
+              </view>
+            </view>
+
+            <view class="team-page__switch-row">
+              <view class="team-page__switch-item">
+                <text class="team-page__field-label">允许单独值班</text>
+                <switch checked="{{form.canSoloShift}}" data-field="canSoloShift" bindchange="handleToggleBoolean" color="#1a73e8" />
+              </view>
+              <view class="team-page__switch-item">
+                <text class="team-page__field-label">可靠标签</text>
+                <switch checked="{{form.reliabilityTag}}" data-field="reliabilityTag" bindchange="handleToggleBoolean" color="#1a73e8" />
+              </view>
+            </view>
+          </view>
+          </view>
+        </scroll-view>
+
+        <view class="team-page__modal-actions">
+          <button
+            wx:if="{{editorMode === 'edit'}}"
+            class="team-page__modal-button team-page__modal-button--danger"
+            data-user-id="{{editingUserId}}"
+            bindtap="handleRequestDelete"
+          >
+            删除
+          </button>
+          <button class="team-page__modal-button team-page__modal-button--ghost" bindtap="handleCloseEditor">取消</button>
+          <button class="team-page__modal-button team-page__modal-button--primary" bindtap="handleSubmitMember">保存</button>
+        </view>
+      </view>
+    </view>
+
+    <bottom-nav
+      items="{{navItems}}"
+      activeKey="{{activeNavKey}}"
+      bind:change="handleNavChange"
+    />
+
+    <confirm-dialog
+      visible="{{deleteDialogVisible}}"
+      title="删除成员"
+      message="确认删除 {{pendingDeleteName}} 吗？如果该成员已有排班和审计记录，系统会直接拒绝删除。"
+      confirmLabel="确认删除"
+      cancelLabel="取消"
+      tone="danger"
+      bind:cancel="handleCancelDelete"
+      bind:confirm="handleConfirmDelete"
+    />
+  </block>
+
+  <block wx:elif="{{guardState === 'disabled'}}">
+    <view class="team-page__guard">
+      <state-view
+        type="error"
+        title="{{guardTitle}}"
+        description="{{guardDescription}}"
+        actionLabel="返回分流页"
+        bind:action="handleReturnToEntry"
+      />
+    </view>
+  </block>
+</view>

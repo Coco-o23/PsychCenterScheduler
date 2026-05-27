@@ -1,0 +1,16 @@
+<view class="member-card">
+  <view class="member-card__avatar">{{avatarText}}</view>
+  <view class="member-card__main">
+    <view class="member-card__head">
+      <text class="member-card__name">{{name}}</text>
+      <status-chip wx:if="{{roleLabel}}" label="{{roleLabel}}" tone="info" />
+    </view>
+    <text class="member-card__meta">{{studentId}} / {{college}}</text>
+    <text class="member-card__meta">{{gender}} / {{grade}}</text>
+  </view>
+  <view class="member-card__side">
+    <text class="member-card__count">{{shiftCount}}</text>
+    <text class="member-card__count-label">班次</text>
+    <button wx:if="{{editable}}" class="member-card__edit" hover-class="member-card__edit--hover" bindtap="handleEdit">编辑</button>
+  </view>
+</view>

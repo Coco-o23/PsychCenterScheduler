@@ -6,6 +6,8 @@ miniprogram_npm/
 # build output
 dist/
 server/dist/
+output/
+server/exports/
 
 # environment files
 .env

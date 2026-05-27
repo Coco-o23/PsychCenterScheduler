@@ -1,0 +1,112 @@
+@import "../../styles/tokens.wxss";
+
+.panel-mask {
+  position: fixed;
+  z-index: 40;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(25, 28, 35, 0.36);
+}
+
+.panel {
+  width: 100%;
+  max-height: 78vh;
+  padding: var(--space-4) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-modal);
+}
+
+.panel__head,
+.panel__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.panel__title {
+  color: var(--color-on-surface);
+  font-size: var(--font-size-headline-md);
+  font-weight: 700;
+  line-height: var(--line-height-headline-md);
+}
+
+.panel__close {
+  width: 64rpx;
+  height: 64rpx;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+  font-size: 40rpx;
+}
+
+.panel__close::after,
+.panel__secondary::after,
+.panel__primary::after {
+  border: 0;
+}
+
+.panel__group {
+  margin-top: var(--space-4);
+}
+
+.panel__group-title {
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-label-md);
+  font-weight: 700;
+  line-height: var(--line-height-label-md);
+}
+
+.panel__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.panel__option {
+  padding: 12rpx 20rpx;
+  border: 2rpx solid var(--color-outline-variant);
+  border-radius: var(--radius-full);
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-label-md);
+  font-weight: 600;
+}
+
+.panel__option--active {
+  border-color: var(--color-secondary);
+  background: #dcfce3;
+  color: var(--color-secondary);
+}
+
+.panel__actions {
+  margin-top: var(--space-5);
+}
+
+.panel__secondary,
+.panel__primary {
+  flex: 1;
+  min-height: 88rpx;
+  margin: 0;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body-md);
+  font-weight: 700;
+}
+
+.panel__secondary {
+  border: 2rpx solid var(--color-outline-variant);
+  background: var(--color-surface-container-lowest);
+  color: var(--color-on-surface);
+}
+
+.panel__primary {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary);
+}

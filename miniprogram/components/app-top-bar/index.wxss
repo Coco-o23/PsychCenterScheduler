@@ -1,0 +1,93 @@
+@import "../../styles/tokens.wxss";
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--height-top-bar);
+  padding: var(--space-3) var(--space-4) var(--space-3);
+  border-bottom: 2rpx solid rgba(193, 198, 214, 0.5);
+  background: var(--color-surface-container-lowest);
+}
+
+.top-bar__text {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.top-bar__eyebrow {
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-label-md);
+  font-weight: 600;
+  line-height: var(--line-height-label-md);
+}
+
+.top-bar__title {
+  overflow: hidden;
+  color: var(--color-on-surface);
+  font-size: var(--font-size-headline-md);
+  font-weight: 700;
+  line-height: var(--line-height-headline-md);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.top-bar__subtitle {
+  overflow: hidden;
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-label-md);
+  line-height: var(--line-height-label-md);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon-button,
+.top-bar__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-radius: var(--radius-full);
+}
+
+.icon-button::after,
+.top-bar__action::after {
+  border: 0;
+}
+
+.icon-button {
+  width: 72rpx;
+  height: 72rpx;
+  padding: 0;
+  background: transparent;
+  color: var(--color-on-surface);
+  font-size: 48rpx;
+  line-height: 72rpx;
+}
+
+.top-bar__action {
+  min-width: 72rpx;
+  height: 64rpx;
+  padding: 0 var(--space-3);
+  background: var(--color-surface-container-low);
+  color: var(--color-primary);
+  font-size: var(--font-size-label-md);
+  font-weight: 700;
+}
+
+.icon-button--hover,
+.top-bar__action--hover {
+  background: var(--color-surface-container);
+}
+
+.top-bar__back-icon {
+  width: 20rpx;
+  height: 20rpx;
+  margin-left: 8rpx;
+  border-left: 4rpx solid var(--color-on-surface);
+  border-bottom: 4rpx solid var(--color-on-surface);
+  transform: rotate(45deg);
+  transform-origin: center;
+}

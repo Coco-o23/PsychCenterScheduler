@@ -1,0 +1,64 @@
+<view class="style-page surface-page">
+  <view class="style-header">
+    <text class="text-headline-lg">{{copy.title}}</text>
+    <text class="text-body-md">{{copy.subtitle}}</text>
+  </view>
+
+  <view class="style-section">
+    <text class="section-title text-headline-md">Colors</text>
+    <view class="swatch-grid">
+      <view wx:for="{{swatches}}" wx:key="token" class="swatch-card surface-card">
+        <view class="swatch-chip" style="background: {{item.value}};"></view>
+        <view class="swatch-meta">
+          <text class="text-label-md">{{item.name}}</text>
+          <text class="text-caption">{{item.token}}</text>
+          <text class="text-caption">{{item.value}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="style-section">
+    <text class="section-title text-headline-md">Typography</text>
+    <view class="surface-card typography-card">
+      <text class="text-headline-lg">{{copy.title}}</text>
+      <text class="text-headline-md">{{copy.cardTitle}}</text>
+      <text class="text-body-lg">{{copy.body}}</text>
+      <text class="text-body-md">{{copy.cardBody}}</text>
+      <text class="text-label-md">Label / 12px / 500</text>
+    </view>
+  </view>
+
+  <view class="style-section">
+    <text class="section-title text-headline-md">Surface</text>
+    <view class="surface-card duty-card">
+      <view class="duty-card__accent"></view>
+      <view class="duty-card__content">
+        <text class="text-headline-md">{{copy.cardTitle}}</text>
+        <text class="text-body-md">{{copy.cardBody}}</text>
+        <view class="chip-row">
+          <text wx:for="{{chips}}" wx:key="label" class="status-chip {{item.className}}">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="style-section">
+    <text class="section-title text-headline-md">Controls</text>
+    <view class="surface-card controls-card">
+      <view class="token-input">{{copy.input}}</view>
+      <button class="token-button token-button--primary">{{copy.primaryAction}}</button>
+      <button class="token-button token-button--secondary">{{copy.secondaryAction}}</button>
+    </view>
+  </view>
+
+  <view class="style-section">
+    <text class="section-title text-headline-md">Time Slots</text>
+    <view class="slot-grid">
+      <view wx:for="{{slots}}" wx:key="meta" class="time-slot {{item.className}}">
+        <text class="slot-title">{{item.title}}</text>
+        <text class="slot-meta">{{item.meta}}</text>
+      </view>
+    </view>
+  </view>
+</view>

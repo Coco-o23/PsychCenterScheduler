@@ -1,0 +1,6 @@
+<view class="bottom-nav">
+  <button wx:for="{{items}}" wx:key="key" class="bottom-nav__item {{item.key == activeKey ? 'bottom-nav__item--active' : ''}}" data-key="{{item.key}}" hover-class="bottom-nav__item--hover" bindtap="handleTap">
+    <text class="bottom-nav__icon">{{item.icon}}</text>
+    <text class="bottom-nav__label">{{item.label}}</text>
+  </button>
+</view>

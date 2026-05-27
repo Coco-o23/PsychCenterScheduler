@@ -1,0 +1,19 @@
+@import "/styles/collection-page.wxss";
+
+.collection-page__member-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.collection-page__member-name {
+  font-size: 28rpx;
+  color: var(--color-on-surface);
+  line-height: 1.4;
+}
+
+.collection-page__member-meta {
+  font-size: 22rpx;
+  color: var(--color-on-surface-variant);
+  line-height: 1.4;
+}

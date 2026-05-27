@@ -1,0 +1,18 @@
+<view wx:if="{{visible}}" class="panel-mask">
+  <view class="panel">
+    <view class="panel__head">
+      <text class="panel__title">{{title}}</text>
+      <button class="panel__close" bindtap="handleClose">×</button>
+    </view>
+    <view wx:for="{{groups}}" wx:key="title" class="panel__group">
+      <text class="panel__group-title">{{item.title}}</text>
+      <view class="panel__options">
+        <text wx:for="{{item.options}}" wx:for-item="option" wx:key="label" class="panel__option {{option.active ? 'panel__option--active' : ''}}">{{option.label}}</text>
+      </view>
+    </view>
+    <view class="panel__actions">
+      <button class="panel__secondary" bindtap="handleReset">重置</button>
+      <button class="panel__primary" bindtap="handleApply">应用筛选</button>
+    </view>
+  </view>
+</view>
