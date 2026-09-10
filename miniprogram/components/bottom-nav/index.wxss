@@ -39,8 +39,8 @@
 }
 
 .bottom-nav__icon {
-  font-size: 34rpx;
-  line-height: 38rpx;
+  width: 40rpx;
+  height: 40rpx;
 }
 
 .bottom-nav__label {

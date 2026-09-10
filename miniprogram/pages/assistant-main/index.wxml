@@ -1,7 +1,5 @@
 <view class="collection-page">
   <block wx:if="{{guardState === 'ready'}}">
-    <app-top-bar eyebrow="{{pageEyebrow}}" title="{{pageTitle}}" />
-
     <view class="collection-page__content">
       <view class="surface-card collection-page__hero collection-page__hero--compact">
         <text class="collection-page__hero-title">{{collectionTitle}}</text>

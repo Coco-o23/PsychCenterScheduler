@@ -32,10 +32,10 @@ Page<{
 }>({
   data: {
     assistantNav: [
-      { key: 'availability', label: '\u586b\u62a5', icon: '\u25a3' },
-      { key: 'schedule', label: '\u65e5\u7a0b', icon: '\u25d4' },
-      { key: 'team', label: '\u56e2\u961f', icon: '\u25c9' },
-      { key: 'profile', label: '\u4e2a\u4eba', icon: '\u25ce' },
+      { key: 'availability', label: '\u586b\u62a5', icon: 'edit_note' },
+      { key: 'schedule', label: '\u65e5\u7a0b', icon: 'calendar_month' },
+      { key: 'team', label: '\u56e2\u961f', icon: 'groups' },
+      { key: 'profile', label: '\u4e2a\u4eba', icon: 'person' },
     ],
     filterGroups: [
       {

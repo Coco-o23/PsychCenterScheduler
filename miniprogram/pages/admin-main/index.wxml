@@ -1,13 +1,5 @@
 <view class="collection-page">
   <block wx:if="{{guardState === 'ready'}}">
-    <app-top-bar
-      eyebrow="中心管理"
-      title="值班管理"
-      subtitle="{{userName}}"
-      actionLabel="本人填报"
-      bind:action="handleOpenOwnAvailability"
-    />
-
     <view class="collection-page__content">
       <view class="surface-card collection-page__hero collection-page__hero--compact">
         <text class="collection-page__hero-title">{{collectionTitle}}</text>
@@ -70,7 +62,7 @@
             </view>
           </view>
 
-          <view class="collection-page__button-row">
+          <view class="collection-page__button-row collection-page__button-row--three">
             <button
               wx:if="{{canPublish}}"
               class="collection-page__primary-button"
@@ -102,6 +94,13 @@
               bindtap="handleShowStage10Hint"
             >
               生成排班表
+            </button>
+            <button
+              class="collection-page__secondary-button"
+              hover-class="button-reset-hover"
+              bindtap="handleOpenOwnAvailability"
+            >
+              本人填报
             </button>
           </view>
         </view>

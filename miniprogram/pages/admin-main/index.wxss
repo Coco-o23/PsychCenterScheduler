@@ -1,1 +1,19 @@
 @import "/styles/collection-page.wxss";
+
+.collection-page__content {
+  padding-top: var(--space-3);
+}
+
+.collection-page__button-row--three {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.collection-page__button-row--three .collection-page__primary-button,
+.collection-page__button-row--three .collection-page__secondary-button {
+  width: 100%;
+  min-width: 0;
+  padding: 0 var(--space-1);
+  font-size: var(--font-size-label-md);
+}

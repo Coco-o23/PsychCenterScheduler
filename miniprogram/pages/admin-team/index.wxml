@@ -1,11 +1,5 @@
 <view class="admin-team team-page">
   <block wx:if="{{guardState === 'ready'}}">
-    <app-top-bar
-      eyebrow="团队管理"
-      title="团队"
-      subtitle="{{userName}}"
-    />
-
     <view class="team-page__content">
       <view class="team-page__hero">
         <text class="team-page__hero-eyebrow">中心管理</text>

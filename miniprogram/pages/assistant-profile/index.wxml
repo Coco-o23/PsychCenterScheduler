@@ -1,7 +1,5 @@
 <view class="profile-page surface-page">
   <block wx:if="{{guardState === 'ready'}}">
-    <app-top-bar title="个人中心" subtitle="{{roleLabel}}" />
-
     <view class="profile-page__content">
       <view class="profile-page__profile-card">
         <view class="profile-page__profile-accent"></view>

@@ -37,7 +37,6 @@ interface AdminMainData {
   guardTitle: string;
   guardDescription: string;
   requestState: 'loading' | 'ready' | 'error';
-  userName: string;
   roleLabel: string;
   semesterName: string;
   teachingWeekLabel: string;
@@ -160,7 +159,6 @@ Page<{
     guardTitle: '检查中',
     guardDescription: '正在确认当前页面访问权限。',
     requestState: 'loading',
-    userName: '',
     roleLabel: '管理员',
     semesterName: '',
     teachingWeekLabel: '',
@@ -184,10 +182,10 @@ Page<{
     activeNavKey: 'schedule',
     republishButtonLabel: '\u91cd\u65b0\u53d1\u5e03',
     navItems: [
-      { key: 'schedule', label: '排班', icon: '排' },
-      { key: 'duty', label: '日程', icon: '班' },
-      { key: 'team', label: '团队', icon: '人' },
-      { key: 'profile', label: '个人', icon: '我' },
+      { key: 'schedule', label: '排班', icon: 'view_quilt' },
+      { key: 'duty', label: '日程', icon: 'calendar_month' },
+      { key: 'team', label: '团队', icon: 'groups' },
+      { key: 'profile', label: '个人', icon: 'person' },
     ],
   },
 
@@ -231,7 +229,6 @@ Page<{
 
     this.setData({
       requestState: 'ready',
-      userName: state.currentUser?.name ?? '',
       roleLabel: state.currentRole === 'super_admin' ? '超级管理员' : '管理员',
       semesterName: state.currentSemester?.name ?? '未配置学期',
       teachingWeekLabel:

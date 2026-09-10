@@ -44,8 +44,6 @@ interface AssistantMainData {
   guardTitle: string;
   guardDescription: string;
   requestState: 'loading' | 'ready' | 'error';
-  pageTitle: string;
-  pageEyebrow: string;
   collectionTitle: string;
   collectionWeekLabel: string;
   collectionStatus: CurrentCollectionFillPayload['collectionStatus'];
@@ -99,10 +97,10 @@ function buildNavItems(role: string): { activeNavKey: string; navItems: NavItem[
     return {
       activeNavKey: 'availability',
       navItems: [
-        { key: 'availability', label: '填报', icon: '填' },
-        { key: 'schedule', label: '日程', icon: '班' },
-        { key: 'team', label: '团队', icon: '人' },
-        { key: 'profile', label: '个人', icon: '我' },
+        { key: 'availability', label: '填报', icon: 'edit_note' },
+        { key: 'schedule', label: '日程', icon: 'calendar_month' },
+        { key: 'team', label: '团队', icon: 'groups' },
+        { key: 'profile', label: '个人', icon: 'person' },
       ],
     };
   }
@@ -110,10 +108,10 @@ function buildNavItems(role: string): { activeNavKey: string; navItems: NavItem[
   return {
     activeNavKey: 'schedule',
     navItems: [
-      { key: 'schedule', label: '排班', icon: '排' },
-      { key: 'duty', label: '日程', icon: '班' },
-      { key: 'team', label: '团队', icon: '人' },
-      { key: 'profile', label: '个人', icon: '我' },
+      { key: 'schedule', label: '排班', icon: 'view_quilt' },
+      { key: 'duty', label: '日程', icon: 'calendar_month' },
+      { key: 'team', label: '团队', icon: 'groups' },
+      { key: 'profile', label: '个人', icon: 'person' },
     ],
   };
 }
@@ -195,8 +193,6 @@ Page<{
     guardTitle: '检查中',
     guardDescription: '正在确认当前页面访问权限。',
     requestState: 'loading',
-    pageTitle: '下周空闲时间填报',
-    pageEyebrow: '空闲填报',
     collectionTitle: '',
     collectionWeekLabel: '',
     collectionStatus: 'none',
@@ -221,10 +217,10 @@ Page<{
     submittedSummaryVisible: false,
     activeNavKey: 'availability',
     navItems: [
-      { key: 'availability', label: '填报', icon: '填' },
-      { key: 'schedule', label: '日程', icon: '班' },
-      { key: 'team', label: '团队', icon: '人' },
-      { key: 'profile', label: '个人', icon: '我' },
+      { key: 'availability', label: '填报', icon: 'edit_note' },
+      { key: 'schedule', label: '日程', icon: 'calendar_month' },
+      { key: 'team', label: '团队', icon: 'groups' },
+      { key: 'profile', label: '个人', icon: 'person' },
     ],
   },
 
@@ -274,8 +270,6 @@ Page<{
 
     this.setData({
       requestState: 'ready',
-      pageTitle: currentRole === 'assistant' ? '下周空闲时间填报' : '本人空闲时间填报',
-      pageEyebrow: currentRole === 'assistant' ? '空闲填报' : '本人填报',
       collectionTitle: payload.title || '第 X 教学周空闲时间收集',
       collectionWeekLabel: payload.weekLabel ?? '当前暂无待填报周次',
       collectionStatus: payload.collectionStatus,

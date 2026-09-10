@@ -1,7 +1,5 @@
 <view class="duty-page surface-page">
   <block wx:if="{{guardState === 'ready'}}">
-    <app-top-bar title="值班管理" />
-
     <view class="duty-page__content">
       <view class="duty-page__month-row">
         <view>

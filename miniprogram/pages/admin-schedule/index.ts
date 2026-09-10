@@ -369,10 +369,10 @@ Page<{
     modalShiftTemplateId: null,
     activeNavKey: 'schedule',
     navItems: [
-      { key: 'schedule', label: '排班', icon: '排' },
-      { key: 'duty', label: '日程', icon: '班' },
-      { key: 'team', label: '团队', icon: '人' },
-      { key: 'profile', label: '个人', icon: '我' },
+      { key: 'schedule', label: '排班', icon: 'view_quilt' },
+      { key: 'duty', label: '日程', icon: 'calendar_month' },
+      { key: 'team', label: '团队', icon: 'groups' },
+      { key: 'profile', label: '个人', icon: 'person' },
     ],
   },
 

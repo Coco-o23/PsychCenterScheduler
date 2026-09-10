@@ -25,5 +25,6 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "\u6392\u73ed\u7cfb\u7edf"
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
 }

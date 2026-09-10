@@ -4,6 +4,6 @@ export interface AppConfig {
 }
 
 export const APP_CONFIG: AppConfig = {
-  apiBaseUrl: 'http://127.0.0.1:3000/api',
+  apiBaseUrl: 'https://www.psychcenter.online/api',
   environment: 'development',
 };

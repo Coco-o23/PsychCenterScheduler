@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "app-top-bar": "/components/app-top-bar/index",
     "bottom-nav": "/components/bottom-nav/index",
     "member-card": "/components/member-card/index",
     "state-view": "/components/state-view/index"
